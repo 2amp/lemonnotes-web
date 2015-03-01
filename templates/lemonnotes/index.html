@@ -13,7 +13,64 @@
       LemonNotes
     </h1>
   </div>
-  <form action="{% url 'find_summoner' %}" method="post" id="post-form">
-    <input type="submit" name="submit" value="Submit">
+  <form id="summoner-search" class="form-inline" method="post" action="{% url 'find_summoner' %}">
+    {% csrf_token %}
+    <fieldset>
+      <legend>Summoners</legend>
+      <div class="form-group" data-bind="foreach: searchFieldSummoners">
+        <label for="summoner_1_name" class="sr-only">Summoner name</label>
+        <input type="text" class="form-control summoner_name" data-bind="textInput: name,
+                                                                         attr: {placeholder: 'Summoner ' + ($index() + 1).toString()},
+                                                                         event: {focusout: function(data, event) {$root.updateOnFocusout($index(), data, event)}, keypress: function(data, event) {return $root.updateOnEnter($index(), data, event)}}">
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary">Start game!</button>
+      </div>
+      <!--
+      <div class="form-group">
+        <label for="summoner_1_name" class="sr-only">Summoner 1 name</label>
+        <input type="text" class="form-control summoner_name" id="summoner_name_1" placeholder="Summoner 1 name">
+      </div>
+      <div class="form-group">
+        <label for="summoner_2_name" class="sr-only">Summoner 2 name</label>
+        <input type="text" class="form-control summoner_name" id="summoner_2_name" placeholder="Summoner 2 name">
+      </div>
+      <div class="form-group">
+        <label for="summoner_3_name" class="sr-only">Summoner 3 name</label>
+        <input type="text" class="form-control summoner_name" id="summoner_3_name" placeholder="Summoner 3 name">
+      </div>
+      <div class="form-group">
+        <label for="summoner_4_name" class="sr-only">Summoner 4 name</label>
+        <input type="text" class="form-control summoner_name" id="summoner_4_name" placeholder="Summoner 4 name">
+      </div>
+      <div class="form-group">
+        <label for="summoner_5_name" class="sr-only">Summoner 5 name</label>
+        <input type="text" class="form-control summoner_name" id="summoner_5_name" placeholder="Summoner 5 name">
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary">Start game!</button>
+      </div>
+    </fieldset> -->
   </form>
+  <br>
+  <button data-bind="click: dump">Dump!</button>
+  <br>
+  <div class="col-md-6">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="col-md-2">Name</th>
+          <th class="col-md-2">Id</th>
+          <th class="col-md-2">Number of matches</th>
+        </tr>
+      </thead>
+      <tbody data-bind="foreach: summoners">
+        <tr data-bind="visible: isDataFetched()">
+          <td class="col-md-2" data-bind="text: name"></td>
+          <td class="col-md-2" data-bind="text: summonerId"></td>
+          <td class="col-md-2" data-bind="text: matches().length"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 {% endblock body_block %}

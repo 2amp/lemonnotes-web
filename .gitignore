@@ -1,3 +1,4 @@
 .DS_Store
 *.pyc
 secret_key.txt
+keys.py

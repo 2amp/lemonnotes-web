@@ -17,8 +17,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open(os.path.join(BASE_DIR, 'lemonnotes_web', 'secret_key.txt')) as f:
-    SECRET_KEY = f.read().strip()
+# with open(os.path.join(BASE_DIR, 'lemonnotes_web', 'secret_key.txt')) as f:
+#     SECRET_KEY = f.read().strip()
+import keys
+SECRET_KEY = keys.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,6 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'lemonnotes',
+    'crispy_forms',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -89,3 +92,45 @@ STATIC_PATH = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = (
     STATIC_PATH,
 )
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        # Include the default Django email handler for errors
+        # This is what you'd get without configuring logging at all.
+        'mail_admins': {
+            'class': 'django.utils.log.AdminEmailHandler',
+            'level': 'ERROR',
+            # But the emails are plain text by default - HTML is nicer
+            'include_html': True,
+        },
+        # Log to a text file that can be rotated by logrotate
+        'logfile': {
+            'class': 'logging.handlers.WatchedFileHandler',
+            'filename': os.path.join(BASE_DIR, 'lemonnotes.log')
+        },
+    },
+    'loggers': {
+        # Again, default Django configuration to email unhandled exceptions
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        # Might as well log any errors anywhere else in Django
+        'django': {
+            'handlers': ['logfile'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        # Your own app - this assumes all your logger names start with "myapp."
+        'myapp': {
+            'handlers': ['logfile'],
+            'level': 'WARNING',  # Or maybe INFO or DEBUG
+            'propagate': False
+        },
+    },
+}
