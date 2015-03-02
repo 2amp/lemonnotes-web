@@ -26,31 +26,7 @@
       <div class="form-group">
         <button type="submit" class="btn btn-primary">Start game!</button>
       </div>
-      <!--
-      <div class="form-group">
-        <label for="summoner_1_name" class="sr-only">Summoner 1 name</label>
-        <input type="text" class="form-control summoner_name" id="summoner_name_1" placeholder="Summoner 1 name">
-      </div>
-      <div class="form-group">
-        <label for="summoner_2_name" class="sr-only">Summoner 2 name</label>
-        <input type="text" class="form-control summoner_name" id="summoner_2_name" placeholder="Summoner 2 name">
-      </div>
-      <div class="form-group">
-        <label for="summoner_3_name" class="sr-only">Summoner 3 name</label>
-        <input type="text" class="form-control summoner_name" id="summoner_3_name" placeholder="Summoner 3 name">
-      </div>
-      <div class="form-group">
-        <label for="summoner_4_name" class="sr-only">Summoner 4 name</label>
-        <input type="text" class="form-control summoner_name" id="summoner_4_name" placeholder="Summoner 4 name">
-      </div>
-      <div class="form-group">
-        <label for="summoner_5_name" class="sr-only">Summoner 5 name</label>
-        <input type="text" class="form-control summoner_name" id="summoner_5_name" placeholder="Summoner 5 name">
-      </div>
-      <div class="form-group">
-        <button type="submit" class="btn btn-primary">Start game!</button>
-      </div>
-    </fieldset> -->
+    </fieldset>
   </form>
   <br>
   <button data-bind="click: dump">Dump!</button>
@@ -61,14 +37,16 @@
         <tr>
           <th class="col-md-2">Name</th>
           <th class="col-md-2">Id</th>
-          <th class="col-md-2">Number of matches</th>
+          <th class="col-md-2">Most played champion</th>
         </tr>
       </thead>
       <tbody data-bind="foreach: summoners">
         <tr data-bind="visible: isDataFetched()">
           <td class="col-md-2" data-bind="text: name"></td>
           <td class="col-md-2" data-bind="text: summonerId"></td>
-          <td class="col-md-2" data-bind="text: matches().length"></td>
+          <!-- ko if: mostPlayedChampions -->
+          <td class="col-md-2" data-bind="text: mostPlayedChampions"></td>
+          <!-- /ko -->
         </tr>
       </tbody>
     </table>

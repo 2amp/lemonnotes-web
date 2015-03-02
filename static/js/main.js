@@ -7,7 +7,8 @@ function SearchFieldSummoner() {
 function Summoner() {
   this.name = ko.observable('');
   this.summonerId = ko.observable(0);
-  this.matches = ko.observableArray();
+  this.stats = ko.observable();
+  this.mostPlayedChampions = ko.observableArray();
   this.isDataFetched = ko.observable(false);
 }
 
@@ -23,7 +24,7 @@ function SummonerListViewModel() {
 
   self.dump = function() {
     for (var i = 0; i < self.summoners().length; i++) {
-      console.log(self.summoners()[i].name());
+      console.log(self.summoners()[i]);
     }
   };
 
@@ -55,7 +56,8 @@ function SummonerListViewModel() {
           summoner.name(data.name);
           summoner.summonerId(data.id);
           summoner.isDataFetched(true);
-          summoner.matches(data.matches);
+          summoner.stats(data.stats);
+          summoner.mostPlayedChampions(data.mostPlayed);
         })
         .fail(function() {
           console.log('error!');
@@ -63,6 +65,8 @@ function SummonerListViewModel() {
     } else {
       summoner.name('');
       summoner.summonerId(0);
+      summoner.stats(null);
+      summoner.mostPlayedChampions(null);
       summoner.isDataFetched(false);
     }
   };

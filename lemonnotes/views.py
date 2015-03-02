@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import requests
-from lemonnotes import constants
 import json
+from lemonnotes import constants
 
 # Create your views here.
 
@@ -10,6 +10,40 @@ import json
 def index(request):
     context_dict = {}
     return render(request, 'lemonnotes/index.html', context_dict)
+
+
+def build_champion_stats(matches):
+    playerStats = {}
+    for match in matches:
+        info = match['participants'][0]
+        champion = str(info['championId'])
+        stats = info['stats']
+
+        winner = stats['winner']
+        kills = stats['kills']
+        deaths = stats['deaths']
+        assists = stats['assists']
+        cs = stats['minionsKilled']
+
+        if champion not in playerStats:
+            playerStats[champion] = {'wins': 1 if winner else 0,
+                                     'games': 1,
+                                     'kills': kills,
+                                     'deaths': deaths,
+                                     'assists': assists,
+                                     'cs': cs}
+        else:
+            if winner:
+                playerStats[champion]['wins'] = playerStats[champion]['wins'] + 1
+                playerStats[champion]['kills'] = playerStats[champion]['kills'] + kills
+                playerStats[champion]['deaths'] = playerStats[champion]['deaths'] + deaths
+                playerStats[champion]['assists'] = playerStats[champion]['assists'] + assists
+                playerStats[champion]['cs'] = playerStats[champion]['cs'] + cs
+    return playerStats
+
+
+def most_played_stats(champion_stats, number=5):
+    return map(lambda x: dict((x,)), sorted(champion_stats.items(), key=lambda x: x[1]['games'], reverse=True)[:5])
 
 
 def get_match_history(region, summoner_id, begin, end):
@@ -54,9 +88,12 @@ def find_summoner(request):
             r = requests.get(url)
             if r.status_code == requests.codes.ok:
                 summoner_info = r.json().itervalues().next()
-                matches = get_matches_for_summoner(summoner_info['id'], 100)
+                matches = get_matches_for_summoner(summoner_info['id'], 50)
                 response = r.json().itervalues().next()
-                response['matches'] = matches
+                champion_stats = build_champion_stats(matches)
+                most_played = most_played_stats(champion_stats)
+                response['championStats'] = champion_stats
+                response['mostPlayed'] = most_played
                 return HttpResponse(json.dumps(response))
             else:
                 print 'API call error! ' + str(r.status_code)
