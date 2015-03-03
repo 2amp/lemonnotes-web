@@ -13,20 +13,18 @@
       LemonNotes
     </h1>
   </div>
-  <form id="summoner-search" class="form-inline" method="post" action="{% url 'find_summoner' %}">
+  <form id="summoner-search" method="post" action="{% url 'find_summoner' %}">
     {% csrf_token %}
-    <fieldset>
-      <legend>Summoners</legend>
-      <div class="form-group" data-bind="foreach: searchFieldSummoners">
+    <div class="form-group summoner-search-fields" data-bind="foreach: searchFieldSummoners">
+      <div class="summoner-search-field">
         <label for="summoner_1_name" class="sr-only">Summoner name</label>
         <input type="text" class="form-control summoner_name" data-bind="textInput: name,
                                                                          attr: {placeholder: 'Summoner ' + ($index() + 1).toString()},
                                                                          event: {focusout: function(data, event) {$root.updateOnFocusout($index(), data, event)}, keypress: function(data, event) {return $root.updateOnEnter($index(), data, event)}}">
+        <i class="fa fa-spinner fa-pulse" data-bind="visible: isFetching()"></i>
       </div>
-      <div class="form-group">
-        <button type="submit" class="btn btn-primary">Start game!</button>
-      </div>
-    </fieldset>
+    </div>
+    <button type="submit" class="btn btn-primary start-game">Start game!</button>
   </form>
   <br>
   <button data-bind="click: dump">Dump!</button>

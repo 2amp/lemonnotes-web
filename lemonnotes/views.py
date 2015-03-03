@@ -13,6 +13,8 @@ def index(request):
 
 
 def build_champion_stats(matches):
+    '''Compiles stats for each summoner by champion ID as a dict with the following format:
+    {'1': {'wins': 10, 'games': 20, 'kills': 100, 'deaths': 100, 'assists': 100, 'cs': 100}}'''
     playerStats = {}
     for match in matches:
         info = match['participants'][0]
@@ -43,6 +45,7 @@ def build_champion_stats(matches):
 
 
 def most_played_stats(champion_stats, number=5):
+    '''Gets the stat dicts for the most played champions.'''
     return map(lambda x: dict((x,)), sorted(champion_stats.items(), key=lambda x: x[1]['games'], reverse=True)[:5])
 
 
