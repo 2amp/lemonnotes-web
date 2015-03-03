@@ -80,7 +80,7 @@ function SummonerListViewModel() {
           summoner.summonerId(data.id);
           summoner.isDataFetched(true);
           summoner.stats(data.stats);
-          summoner.mostPlayedChampions(data.mostPlayed);
+          summoner.mostPlayedChampions(data.mostPlayedChampions);
         })
         .fail(function() {
           console.log('error!');

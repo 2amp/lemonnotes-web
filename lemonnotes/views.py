@@ -37,14 +37,15 @@ def build_champion_stats(matches):
         else:
             if winner:
                 playerStats[champion]['wins'] = playerStats[champion]['wins'] + 1
-                playerStats[champion]['kills'] = playerStats[champion]['kills'] + kills
-                playerStats[champion]['deaths'] = playerStats[champion]['deaths'] + deaths
-                playerStats[champion]['assists'] = playerStats[champion]['assists'] + assists
-                playerStats[champion]['cs'] = playerStats[champion]['cs'] + cs
+            playerStats[champion]['games'] = playerStats[champion]['games'] + 1
+            playerStats[champion]['kills'] = playerStats[champion]['kills'] + kills
+            playerStats[champion]['deaths'] = playerStats[champion]['deaths'] + deaths
+            playerStats[champion]['assists'] = playerStats[champion]['assists'] + assists
+            playerStats[champion]['cs'] = playerStats[champion]['cs'] + cs
     return playerStats
 
 
-def most_played_stats(champion_stats, number=5):
+def most_played_champions_stats(champion_stats, number=5):
     '''Gets the stat dicts for the most played champions.'''
     return map(lambda x: dict((x,)), sorted(champion_stats.items(), key=lambda x: x[1]['games'], reverse=True)[:5])
 
@@ -94,9 +95,9 @@ def find_summoner(request):
                 matches = get_matches_for_summoner(summoner_info['id'], 50)
                 response = r.json().itervalues().next()
                 champion_stats = build_champion_stats(matches)
-                most_played = most_played_stats(champion_stats)
+                most_played_champions = most_played_champions_stats(champion_stats)
                 response['championStats'] = champion_stats
-                response['mostPlayed'] = most_played
+                response['mostPlayedChampions'] = most_played_champions
                 return HttpResponse(json.dumps(response))
             else:
                 print 'API call error! ' + str(r.status_code)
