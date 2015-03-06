@@ -2,36 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import requests
 import json
-from lemonnotes import utils, tasks
-from lemonnotes.models import Realms
-from datetime import datetime
-import pytz
+from lemonnotes import utils
+from lemonnotes.models import Realms, Champion
 
 # Create your views here.
 
 
 def index(request):
-    # I should probably should cache this?  I also have no idea where to put this...
-    t = tasks.add.delay(1, 2)
-    print t
-    realms = Realms.get_solo()
-    utc = pytz.UTC
-    # Update realms if it has been longer than one day since it was last updated
-    if (datetime.now(utc) - realms.last_updated).days > 1:
-        print '>>> Updating realms! Time since last update: {0} days'.format((datetime.now(utc) - realms.last_updated).days)
-        url = utils.api_url(utils.K_LOL_STATIC_REALM, 'na', '', None)
-        r = requests.get(url)
-        if r.status_code == requests.codes.ok:
-            fetched_realms = r.json()
-            realms.v = fetched_realms['v']
-            realms.dd = fetched_realms['dd']
-            realms.cdn = fetched_realms['cdn']
-            realms.lg = fetched_realms['lg']
-            realms.n = fetched_realms['n']
-            realms.profile_icon_max = fetched_realms['profileiconmax']
-            realms.l = fetched_realms['l']
-            realms.css = fetched_realms['css']
-            realms.save()
     context_dict = {}
     return render(request, 'lemonnotes/index.html', context_dict)
 
@@ -42,7 +19,7 @@ def build_champion_stats(matches):
     playerStats = {}
     for match in matches:
         info = match['participants'][0]
-        champion = str(info['championId'])
+        champion = info['championId']
         stats = info['stats']
 
         winner = stats['winner']
@@ -66,7 +43,9 @@ def build_champion_stats(matches):
             playerStats[champion]['deaths'] = playerStats[champion]['deaths'] + deaths
             playerStats[champion]['assists'] = playerStats[champion]['assists'] + assists
             playerStats[champion]['cs'] = playerStats[champion]['cs'] + cs
-            playerStats[champion]['image_link'] = utils.image_url(utils.K_LOL_CHAMP_ICON, Realms.get_solo().n['champion'], 'Lucian')
+            playerStats[champion]['image_url'] = utils.image_url(utils.K_LOL_CHAMP_ICON,
+                                                                  Realms.get_solo().n['champion'],
+                                                                  Champion.objects.get(idNumber=champion).key)
     return playerStats
 
 

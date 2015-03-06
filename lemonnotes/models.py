@@ -29,3 +29,13 @@ class Realms(SingletonModel):
 
     class Meta:
         verbose_name = "Realms"
+
+
+class Champion(models.Model):
+    idNumber = models.IntegerField(default=0, unique=True)
+    title = models.CharField(max_length=128, default='')
+    name = models.CharField(max_length=128, default='')
+    key = models.CharField(max_length=128, default='')
+
+    class Meta:
+            verbose_name_plural = "Champions"

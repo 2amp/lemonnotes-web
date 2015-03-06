@@ -46,7 +46,7 @@
           <td>
             <ul class='most-played-champions-list' data-bind='foreach: mostPlayedChampions'>
               <li class='most-played-champion-data'>
-                <div class='champion-icon' data-bind="attr: {style: $root.testUrl}"></div>
+                <div class='champion-icon' data-bind="attr: {style: $root.styleFromUrl($data[Object.keys($data)[0]].image_url)}"></div>
               </li>
             </ul>
           </td>

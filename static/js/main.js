@@ -82,6 +82,9 @@ function SummonerListViewModel() {
           summoner.isDataFetched(true);
           summoner.stats(data.stats);
           summoner.mostPlayedChampions(data.mostPlayedChampions);
+          for (var i = 0; i < 5; i++) {
+            console.log(data.mostPlayedChampions[i][Object.keys(data.mostPlayedChampions[i])[0]]);
+          }
         })
         .fail(function() {
           console.log('error!');
@@ -96,6 +99,10 @@ function SummonerListViewModel() {
       summoner.mostPlayedChampions(null);
       summoner.isDataFetched(false);
     }
+  };
+
+  self.styleFromUrl = function(url) {
+    return 'background-image: url("' + url + '");';
   };
 }
 
