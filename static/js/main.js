@@ -21,6 +21,7 @@ function Summoner() {
 
 function SummonerListViewModel() {
   var self = this;
+  self.testUrl = "background-image: url('https://ddragon.leagueoflegends.com/cdn/5.4.1/img/champion/Lucian.png');";
   self.searchFieldSummoners = ko.observableArray();
   self.summoners = ko.observableArray();
 

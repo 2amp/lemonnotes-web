@@ -35,6 +35,10 @@ K_LOL_STATIC_RUNE_LIST = PATH_STATIC + '/rune'
 K_LOL_STATIC_RUNE = PATH_STATIC + '/rune/{path}'
 K_LOL_STATIC_SPELL_LIST = PATH_STATIC + '/summoner-spell'
 K_LOL_STATIC_SPELL = PATH_STATIC + '/summoner-spell/{path}'
+K_LOL_STATIC_REALM = PATH_STATIC + "/realm"
+K_LOL_STATIC_VERSIONS = PATH_STATIC + "/versions"
+K_LOL_STATIC_LANGUAGES = PATH_STATIC + "/languages"
+K_LOL_STATIC_LANGUAGE_STRINGS = PATH_STATIC + "/language-strings"
 
 # status
 PATH_STATUS = 'shards'
@@ -67,6 +71,14 @@ PATH_TEAM = 'api/lol/{region}/v2.4/team'
 K_LOL_TEAM_BY_SUMMONER = PATH_TEAM + '/by-summoner/{path}'                  # {summoner_ids}
 K_LOL_TEAM = PATH_TEAM + '/{path}'                                          # {team_ids}
 
+# image assets
+DDRAGON = "https://ddragon.leagueoflegends.com/cdn"
+K_LOL_PROFILE_ICON = DDRAGON + '/{version}/img/profileicon/{key}.png'
+K_LOL_CHAMP_SPLASH = DDRAGON + '/img/champion/splash/{key}_0.jpg'
+K_LOL_CHAMP_ICON = DDRAGON + '/{version}/img/champion/{key}.png'
+K_LOL_SPELL_ICON = DDRAGON + '/{version}/img/spell/{key}.png'
+K_LOL_ITEM_ICON = DDRAGON + '/{version}/img/item/{key}.png'
+
 
 def api_url(call, region, path_param, query_params):
     url = '{0}/{1}?{2}api_key={3}'.format(BASE_URL, call, '{query}', RIOT_API_KEY)
@@ -82,5 +94,15 @@ def api_url(call, region, path_param, query_params):
     if query_params:
         for param in query_params:
             query_param = query_param + param + '&'
-    url = url.format('{server}', server=server, region=region, path=path_param, query=query_param)
+    print url
+    url = url.format(server=server, region=region, path=path_param, query=query_param)
+    return url
+
+
+def image_url(call, version, key):
+    url = call
+    if call == K_LOL_CHAMP_SPLASH:
+        url = url.format(key=key)
+    else:
+        url = url.format(version=version, key=key)
     return url

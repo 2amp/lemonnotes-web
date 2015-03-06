@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'lemonnotes',
     'crispy_forms',
+    'solo',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -134,3 +135,11 @@ LOGGING = {
         },
     },
 }
+
+BROKER_URL = 'amqp://'
+CELERY_RESULT_BACKEND = 'amqp://'
+
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_ENABLE_UTC = True
