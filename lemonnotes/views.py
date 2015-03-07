@@ -4,6 +4,7 @@ import requests
 import json
 from lemonnotes import utils
 from lemonnotes.models import Realms, Champion
+from time import sleep
 
 # Create your views here.
 
@@ -35,6 +36,10 @@ def build_champion_stats(matches):
                                      'deaths': deaths,
                                      'assists': assists,
                                      'cs': cs}
+            playerStats[champion]['image_url'] = utils.image_url(utils.K_LOL_CHAMP_ICON,
+                                                                 Realms.get_solo().n['champion'],
+                                                                 Champion.objects.get(idNumber=champion).key)
+            print playerStats[champion]['image_url']
         else:
             if winner:
                 playerStats[champion]['wins'] = playerStats[champion]['wins'] + 1
@@ -43,9 +48,6 @@ def build_champion_stats(matches):
             playerStats[champion]['deaths'] = playerStats[champion]['deaths'] + deaths
             playerStats[champion]['assists'] = playerStats[champion]['assists'] + assists
             playerStats[champion]['cs'] = playerStats[champion]['cs'] + cs
-            playerStats[champion]['image_url'] = utils.image_url(utils.K_LOL_CHAMP_ICON,
-                                                                  Realms.get_solo().n['champion'],
-                                                                  Champion.objects.get(idNumber=champion).key)
     return playerStats
 
 
@@ -65,6 +67,11 @@ def get_match_history(region, summoner_id, begin, end):
     url = utils.api_url(utils.K_LOL_MATCH_HISTORY, region, summoner_id, [begin_index, end_index])
     r = requests.get(url)
     matches = []
+    if r.status_code == 429:
+        # I have no idea how this will affect other threads. Hopefully we can get a greater rate limit so we don't have
+        # to resort to doing this.
+        sleep(1)
+        r = requests.get(url)
     if r.status_code == requests.codes.ok and 'matches' in r.json():
         matches = r.json()['matches']
     return matches
@@ -84,6 +91,25 @@ def get_matches_for_summoner(summoner_id, number_of_matches=15):
     return matches
 
 
+def get_solo_queue_ranked_info(summoner_id):
+    solo_queue_ranked_info = {'tier': 'Unranked', 'division': ''}
+    url = utils.api_url(utils.K_LOL_LEAGUE_SUMMONER_ENTRY, 'na', summoner_id, None)
+    print url
+    r = requests.get(url)
+    if r.status_code == 429:
+        # I have no idea how this will affect other threads. Hopefully we can get a greater rate limit so we don't have
+        # to resort to doing this.
+        sleep(1)
+        r = requests.get(url)
+    if r.status_code == requests.codes.ok and str(summoner_id) in r.json():
+        all_ranked_info = r.json()[str(summoner_id)]
+        for queue_info in all_ranked_info:
+            if queue_info['queue'] == 'RANKED_SOLO_5x5':
+                solo_queue_ranked_info['tier'] = queue_info['tier'].capitalize()
+                solo_queue_ranked_info['division'] = queue_info['entries'][0]['division']
+    return solo_queue_ranked_info
+
+
 def find_summoner(request):
     '''Gets the summoner info dict.'''
     if request.method == 'GET':
@@ -91,14 +117,21 @@ def find_summoner(request):
         if len(summoner_name) > 0:
             url = utils.api_url(utils.K_LOL_SUMMONER_BY_NAME, 'na', summoner_name, None)
             r = requests.get(url)
+            if r.status_code == 429:
+                # I have no idea how this will affect other threads. Hopefully we can get a greater rate limit so we don't have
+                # to resort to doing this.
+                sleep(1)
+                r = requests.get(url)
             if r.status_code == requests.codes.ok:
                 summoner_info = r.json().itervalues().next()
                 matches = get_matches_for_summoner(summoner_info['id'], 50)
                 response = r.json().itervalues().next()
                 champion_stats = build_champion_stats(matches)
                 most_played_champions = most_played_champions_stats(champion_stats)
+                solo_queue_ranked_info = get_solo_queue_ranked_info(summoner_info['id'])
                 response['championStats'] = champion_stats
                 response['mostPlayedChampions'] = most_played_champions
+                response['soloQueueRankedInfo'] = solo_queue_ranked_info
                 return HttpResponse(json.dumps(response))
             else:
                 print 'API call error! ' + str(r.status_code)

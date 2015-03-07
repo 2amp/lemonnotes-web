@@ -14,6 +14,7 @@ function SearchFieldSummoner() {
 function Summoner() {
   this.name = ko.observable('');
   this.summonerId = ko.observable(0);
+  this.ranking = ko.observable('');
   this.stats = ko.observable();
   this.mostPlayedChampions = ko.observableArray();
   this.isDataFetched = ko.observable(false);
@@ -100,6 +101,7 @@ function SummonerListViewModel() {
         summoner.isDataFetched(true);
         summoner.stats(data.stats);
         summoner.mostPlayedChampions(data.mostPlayedChampions);
+        summoner.ranking(data.soloQueueRankedInfo.tier + ' ' + data.soloQueueRankedInfo.division);
         searchFieldSummoner.fetchStatus('valid');
       })
       .fail(function() {

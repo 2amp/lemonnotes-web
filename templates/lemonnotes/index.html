@@ -39,14 +39,14 @@
       <thead>
         <tr>
           <th class="name">Name</th>
-          <th class="summonerId">Id</th>
+          <th class="ranking">Ranking</th>
           <th class="most-played-champions">Most played champions</th>
         </tr>
       </thead>
       <tbody data-bind="foreach: summoners">
         <tr data-bind="visible: isDataFetched()">
           <td data-bind="text: name"></td>
-          <td data-bind="text: summonerId"></td>
+          <td data-bind="text: ranking"></td>
           <!-- ko if: mostPlayedChampions -->
           <td>
             <ul class='most-played-champions-list' data-bind='foreach: mostPlayedChampions'>
