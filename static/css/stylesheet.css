@@ -31,6 +31,8 @@ tr .most-played-champions {
 
 .most-played-champion-data {
     display: inline-block;
+    font-size: 10px;
+    text-align: center;
 }
 
 .most-played-champions-list {
@@ -40,9 +42,9 @@ tr .most-played-champions {
 }
 
 .champion-icon {
-    height: 40px;
-    width: 40px;
-    background-size: 40px;
+    height: 50px;
+    width: 50px;
+    background-size: 50px;
 }
 
 th {
@@ -63,4 +65,12 @@ td {
 
 .summoner-search-field-fetching {
     border-color: orange !important;
+}
+
+.wins {
+    color: green;
+}
+
+.losses {
+    color: red;
 }

@@ -31,9 +31,6 @@
     </div>
     <button type="submit" class="btn btn-primary start-game">Start game!</button>
   </form>
-  <br>
-  <button data-bind="click: dump">Dump!</button>
-  <br>
   <div class="col-md-10">
     <table class="table">
       <thead>
@@ -52,6 +49,12 @@
             <ul class='most-played-champions-list' data-bind='foreach: mostPlayedChampions'>
               <li class='most-played-champion-data'>
                 <div class='champion-icon' data-bind="attr: {style: $root.styleFromUrl($data[Object.keys($data)[0]].image_url)}"></div>
+                <div data-bind="text: 'Games: ' + $data[Object.keys($data)[0]].games"></div>
+                <div>
+                <span class="wins" data-bind="text: $data[Object.keys($data)[0]].wins"></span>
+                /
+                <span class="losses" data-bind="text: $data[Object.keys($data)[0]].games - $data[Object.keys($data)[0]].wins"></span>
+                </div>
               </li>
             </ul>
           </td>
