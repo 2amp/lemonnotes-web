@@ -7,7 +7,7 @@ var oldSearchFieldValues = new Array(NUMBER_OF_SUMMONERS);
 // Bound to search fields
 function SearchFieldSummoner() {
   this.name = ko.observable('');
-  this.isFetching = ko.observable(false);
+  this.fetchStatus = ko.observable('none');
 }
 
 // Bound to stats table
@@ -21,7 +21,6 @@ function Summoner() {
 
 function SummonerListViewModel() {
   var self = this;
-  self.testUrl = "background-image: url('https://ddragon.leagueoflegends.com/cdn/5.4.1/img/champion/Lucian.png');";
   self.searchFieldSummoners = ko.observableArray();
   self.summoners = ko.observableArray();
 
@@ -42,11 +41,21 @@ function SummonerListViewModel() {
     if (code === 13) {
       e.preventDefault();
       var searchFieldSummoner = self.searchFieldSummoners()[index];
-      if (searchFieldSummoner.name() && searchFieldSummoner.name() !== oldSearchFieldValues[index])
-      {
-        oldSearchFieldValues[index] = self.searchFieldSummoners()[index].name();
-        searchFieldSummoner.isFetching(true);
-        self.sendRequest(index);
+      var summoner = self.summoners()[index];
+      if (searchFieldSummoner.name()) {
+        if (searchFieldSummoner.name() !== oldSearchFieldValues[index]) {
+          oldSearchFieldValues[index] = self.searchFieldSummoners()[index].name();
+          searchFieldSummoner.fetchStatus('fetching');
+          self.sendRequest(index);
+        }
+      } else {
+        summoner.name('');
+        summoner.summonerId(0);
+        summoner.stats(null);
+        summoner.mostPlayedChampions(null);
+        summoner.isDataFetched(false);
+        oldSearchFieldValues[index] = '';
+        searchFieldSummoner.fetchStatus('none');
       }
       return false;
     } else {
@@ -58,11 +67,21 @@ function SummonerListViewModel() {
   // Called when focus leaves search field
   self.updateOnFocusout = function(index, d, e) {
     var searchFieldSummoner = self.searchFieldSummoners()[index];
-    if (searchFieldSummoner.name() && searchFieldSummoner.name() !== oldSearchFieldValues[index])
-    {
-      oldSearchFieldValues[index] = self.searchFieldSummoners()[index].name();
-      searchFieldSummoner.isFetching(true);
-      self.sendRequest(index);
+    var summoner = self.summoners()[index];
+    if (searchFieldSummoner.name()) {
+      if (searchFieldSummoner.name() !== oldSearchFieldValues[index]) {
+        oldSearchFieldValues[index] = self.searchFieldSummoners()[index].name();
+        searchFieldSummoner.fetchStatus('fetching');
+        self.sendRequest(index);
+      }
+    } else {
+        summoner.name('');
+        summoner.summonerId(0);
+        summoner.stats(null);
+        summoner.mostPlayedChampions(null);
+        summoner.isDataFetched(false);
+        oldSearchFieldValues[index] = '';
+        searchFieldSummoner.fetchStatus('none');
     }
   };
 
@@ -71,34 +90,22 @@ function SummonerListViewModel() {
   self.sendRequest = function(index) {
     var searchFieldSummoner = self.searchFieldSummoners()[index];
     var summoner = self.summoners()[index];
-    if (searchFieldSummoner.name()) {
-      console.log('Sending request!');
-      $.get('/lemonnotes/find_summoner/', {summoner_name: searchFieldSummoner.name()})
-        .done(function(data) {
-          console.log($.parseJSON(data));
-          data = $.parseJSON(data);
-          summoner.name(data.name);
-          summoner.summonerId(data.id);
-          summoner.isDataFetched(true);
-          summoner.stats(data.stats);
-          summoner.mostPlayedChampions(data.mostPlayedChampions);
-          for (var i = 0; i < 5; i++) {
-            console.log(data.mostPlayedChampions[i][Object.keys(data.mostPlayedChampions[i])[0]]);
-          }
-        })
-        .fail(function() {
-          console.log('error!');
-        })
-        .always(function() {
-          searchFieldSummoner.isFetching(false);
-        });
-    } else {
-      summoner.name('');
-      summoner.summonerId(0);
-      summoner.stats(null);
-      summoner.mostPlayedChampions(null);
-      summoner.isDataFetched(false);
-    }
+    console.log('Sending request!');
+    $.get('/lemonnotes/find_summoner/', {summoner_name: searchFieldSummoner.name()})
+      .done(function(data) {
+        console.log($.parseJSON(data));
+        data = $.parseJSON(data);
+        summoner.name(data.name);
+        summoner.summonerId(data.id);
+        summoner.isDataFetched(true);
+        summoner.stats(data.stats);
+        summoner.mostPlayedChampions(data.mostPlayedChampions);
+        searchFieldSummoner.fetchStatus('valid');
+      })
+      .fail(function() {
+        console.log('error!');
+        searchFieldSummoner.fetchStatus('invalid');
+      });
   };
 
   self.styleFromUrl = function(url) {

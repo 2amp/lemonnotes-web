@@ -20,8 +20,13 @@
         <label for="summoner_1_name" class="sr-only">Summoner name</label>
         <input type="text" class="form-control summoner_name" data-bind="textInput: name,
                                                                          attr: {placeholder: 'Summoner ' + ($index() + 1).toString()},
-                                                                         event: {focusout: function(data, event) {$root.updateOnFocusout($index(), data, event)}, keypress: function(data, event) {return $root.updateOnEnter($index(), data, event)}}">
-        <i class="fa fa-spinner fa-pulse" data-bind="visible: isFetching()"></i>
+                                                                         event: {focusout: function(data, event) {$root.updateOnFocusout($index(), data, event)}, keypress: function(data, event) {return $root.updateOnEnter($index(), data, event)}},
+                                                                         css: {
+                                                                           'summoner-search-field-valid': fetchStatus() === 'valid',
+                                                                           'summoner-search-field-invalid': fetchStatus() === 'invalid',
+                                                                           'summoner-search-field-fetching': fetchStatus() === 'fetching',
+                                                                           'summoner-search-field-none': fetchStatus() === 'none'
+                                                                         }">
       </div>
     </div>
     <button type="submit" class="btn btn-primary start-game">Start game!</button>

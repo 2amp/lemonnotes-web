@@ -24,13 +24,15 @@ SECRET_KEY = keys.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# DEBUG = False
 
 TEMPLATE_DEBUG = True
+# TEMPLATE_DEBUG = False
 TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 TEMPLATE_DIRS = [TEMPLATE_PATH, ]
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '127.0.0.1:8000', 'localhost:8000', '*', ]
+ADMINS = (('Christopher Fu', 'chrisf8442@gmail.com'),)
 
 # Application definition
 

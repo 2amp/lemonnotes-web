@@ -33,6 +33,12 @@ tr .most-played-champions {
     display: inline-block;
 }
 
+.most-played-champions-list {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: -6px;
+}
+
 .champion-icon {
     height: 40px;
     width: 40px;
@@ -45,4 +51,16 @@ th {
 
 td {
     text-align: center;
+}
+
+.summoner-search-field-valid {
+    border-color: green !important;
+}
+
+.summoner-search-field-invalid {
+    border-color: red !important;
+}
+
+.summoner-search-field-fetching {
+    border-color: orange !important;
 }
