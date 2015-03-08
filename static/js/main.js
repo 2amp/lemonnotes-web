@@ -97,16 +97,21 @@ function SummonerListViewModel() {
     console.log('Sending request!');
     $.get('/lemonnotes/find_summoner/', {summoner_name: searchFieldSummoner.name()})
       .done(function(data) {
-        console.log($.parseJSON(data));
-        data = $.parseJSON(data);
-        summoner.name(data.name);
-        summoner.summonerId(data.id);
-        summoner.isDataFetched(true);
-        summoner.stats(data.stats);
-        summoner.mostPlayedChampions(data.mostPlayedChampions);
-        summoner.bestPerformanceChampions(data.bestPerformanceChampions);
-        summoner.ranking(data.soloQueueRankedInfo.tier + ' ' + data.soloQueueRankedInfo.division);
-        searchFieldSummoner.fetchStatus('valid');
+        if (data) {
+          console.log($.parseJSON(data));
+          data = $.parseJSON(data);
+          summoner.name(data.name);
+          summoner.summonerId(data.id);
+          summoner.isDataFetched(true);
+          summoner.stats(data.stats);
+          summoner.mostPlayedChampions(data.mostPlayedChampions);
+          summoner.bestPerformanceChampions(data.bestPerformanceChampions);
+          summoner.ranking(data.soloQueueRankedInfo.tier + ' ' + data.soloQueueRankedInfo.division);
+          searchFieldSummoner.fetchStatus('valid');
+        } else {
+          console.log('error!');
+          searchFieldSummoner.fetchStatus('invalid');
+        }
       })
       .fail(function() {
         console.log('error!');

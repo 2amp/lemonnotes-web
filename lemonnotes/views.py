@@ -150,7 +150,7 @@ def find_summoner(request):
                 return HttpResponse(json.dumps(response))
             else:
                 print 'API call error! ' + str(r.status_code)
-                return HttpResponse()
+                return HttpResponse({})
     else:
         print '>>> Form POST!'
         return HttpResponse()
