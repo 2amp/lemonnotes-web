@@ -1,0 +1,1264 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE TABLE auth_group (
+    id integer NOT NULL,
+    name character varying(80) NOT NULL
+);
+
+
+ALTER TABLE auth_group OWNER TO chrisf;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: chrisf
+--
+
+CREATE SEQUENCE auth_group_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_group_id_seq OWNER TO chrisf;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: chrisf
+--
+
+ALTER SEQUENCE auth_group_id_seq OWNED BY auth_group.id;
+
+
+--
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE TABLE auth_group_permissions (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE auth_group_permissions OWNER TO chrisf;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: chrisf
+--
+
+CREATE SEQUENCE auth_group_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_group_permissions_id_seq OWNER TO chrisf;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: chrisf
+--
+
+ALTER SEQUENCE auth_group_permissions_id_seq OWNED BY auth_group_permissions.id;
+
+
+--
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE TABLE auth_permission (
+    id integer NOT NULL,
+    name character varying(50) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE auth_permission OWNER TO chrisf;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: chrisf
+--
+
+CREATE SEQUENCE auth_permission_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_permission_id_seq OWNER TO chrisf;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: chrisf
+--
+
+ALTER SEQUENCE auth_permission_id_seq OWNED BY auth_permission.id;
+
+
+--
+-- Name: auth_user; Type: TABLE; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE TABLE auth_user (
+    id integer NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone NOT NULL,
+    is_superuser boolean NOT NULL,
+    username character varying(30) NOT NULL,
+    first_name character varying(30) NOT NULL,
+    last_name character varying(30) NOT NULL,
+    email character varying(75) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE auth_user OWNER TO chrisf;
+
+--
+-- Name: auth_user_groups; Type: TABLE; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE TABLE auth_user_groups (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE auth_user_groups OWNER TO chrisf;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: chrisf
+--
+
+CREATE SEQUENCE auth_user_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_user_groups_id_seq OWNER TO chrisf;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: chrisf
+--
+
+ALTER SEQUENCE auth_user_groups_id_seq OWNED BY auth_user_groups.id;
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE; Schema: public; Owner: chrisf
+--
+
+CREATE SEQUENCE auth_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_user_id_seq OWNER TO chrisf;
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: chrisf
+--
+
+ALTER SEQUENCE auth_user_id_seq OWNED BY auth_user.id;
+
+
+--
+-- Name: auth_user_user_permissions; Type: TABLE; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE TABLE auth_user_user_permissions (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE auth_user_user_permissions OWNER TO chrisf;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: chrisf
+--
+
+CREATE SEQUENCE auth_user_user_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_user_user_permissions_id_seq OWNER TO chrisf;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: chrisf
+--
+
+ALTER SEQUENCE auth_user_user_permissions_id_seq OWNED BY auth_user_user_permissions.id;
+
+
+--
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE TABLE django_admin_log (
+    id integer NOT NULL,
+    action_time timestamp with time zone NOT NULL,
+    object_id text,
+    object_repr character varying(200) NOT NULL,
+    action_flag smallint NOT NULL,
+    change_message text NOT NULL,
+    content_type_id integer,
+    user_id integer NOT NULL,
+    CONSTRAINT django_admin_log_action_flag_check CHECK ((action_flag >= 0))
+);
+
+
+ALTER TABLE django_admin_log OWNER TO chrisf;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: chrisf
+--
+
+CREATE SEQUENCE django_admin_log_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE django_admin_log_id_seq OWNER TO chrisf;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: chrisf
+--
+
+ALTER SEQUENCE django_admin_log_id_seq OWNED BY django_admin_log.id;
+
+
+--
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE TABLE django_content_type (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE django_content_type OWNER TO chrisf;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: chrisf
+--
+
+CREATE SEQUENCE django_content_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE django_content_type_id_seq OWNER TO chrisf;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: chrisf
+--
+
+ALTER SEQUENCE django_content_type_id_seq OWNED BY django_content_type.id;
+
+
+--
+-- Name: django_migrations; Type: TABLE; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE TABLE django_migrations (
+    id integer NOT NULL,
+    app character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE django_migrations OWNER TO chrisf;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: chrisf
+--
+
+CREATE SEQUENCE django_migrations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE django_migrations_id_seq OWNER TO chrisf;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: chrisf
+--
+
+ALTER SEQUENCE django_migrations_id_seq OWNED BY django_migrations.id;
+
+
+--
+-- Name: django_session; Type: TABLE; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE TABLE django_session (
+    session_key character varying(40) NOT NULL,
+    session_data text NOT NULL,
+    expire_date timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE django_session OWNER TO chrisf;
+
+--
+-- Name: lemonnotes_champion; Type: TABLE; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE TABLE lemonnotes_champion (
+    id integer NOT NULL,
+    "idNumber" integer NOT NULL,
+    title character varying(128) NOT NULL,
+    name character varying(128) NOT NULL,
+    key character varying(128) NOT NULL
+);
+
+
+ALTER TABLE lemonnotes_champion OWNER TO chrisf;
+
+--
+-- Name: lemonnotes_champion_id_seq; Type: SEQUENCE; Schema: public; Owner: chrisf
+--
+
+CREATE SEQUENCE lemonnotes_champion_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE lemonnotes_champion_id_seq OWNER TO chrisf;
+
+--
+-- Name: lemonnotes_champion_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: chrisf
+--
+
+ALTER SEQUENCE lemonnotes_champion_id_seq OWNED BY lemonnotes_champion.id;
+
+
+--
+-- Name: lemonnotes_realms; Type: TABLE; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE TABLE lemonnotes_realms (
+    id integer NOT NULL,
+    cdn character varying(255) NOT NULL,
+    css character varying(64) NOT NULL,
+    dd character varying(64) NOT NULL,
+    l character varying(64) NOT NULL,
+    lg character varying(64) NOT NULL,
+    n text NOT NULL,
+    profile_icon_max integer NOT NULL,
+    v character varying(64) NOT NULL,
+    last_updated timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE lemonnotes_realms OWNER TO chrisf;
+
+--
+-- Name: lemonnotes_realms_id_seq; Type: SEQUENCE; Schema: public; Owner: chrisf
+--
+
+CREATE SEQUENCE lemonnotes_realms_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE lemonnotes_realms_id_seq OWNER TO chrisf;
+
+--
+-- Name: lemonnotes_realms_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: chrisf
+--
+
+ALTER SEQUENCE lemonnotes_realms_id_seq OWNED BY lemonnotes_realms.id;
+
+
+--
+-- Name: lemonnotes_summoner; Type: TABLE; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE TABLE lemonnotes_summoner (
+    id integer NOT NULL,
+    "idNumber" integer NOT NULL,
+    name character varying(255) NOT NULL,
+    region character varying(8) NOT NULL
+);
+
+
+ALTER TABLE lemonnotes_summoner OWNER TO chrisf;
+
+--
+-- Name: lemonnotes_summoner_id_seq; Type: SEQUENCE; Schema: public; Owner: chrisf
+--
+
+CREATE SEQUENCE lemonnotes_summoner_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE lemonnotes_summoner_id_seq OWNER TO chrisf;
+
+--
+-- Name: lemonnotes_summoner_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: chrisf
+--
+
+ALTER SEQUENCE lemonnotes_summoner_id_seq OWNED BY lemonnotes_summoner.id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY auth_group ALTER COLUMN id SET DEFAULT nextval('auth_group_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY auth_permission ALTER COLUMN id SET DEFAULT nextval('auth_permission_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY auth_user ALTER COLUMN id SET DEFAULT nextval('auth_user_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY auth_user_groups ALTER COLUMN id SET DEFAULT nextval('auth_user_groups_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY auth_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('auth_user_user_permissions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY django_admin_log ALTER COLUMN id SET DEFAULT nextval('django_admin_log_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY django_content_type ALTER COLUMN id SET DEFAULT nextval('django_content_type_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY django_migrations ALTER COLUMN id SET DEFAULT nextval('django_migrations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY lemonnotes_champion ALTER COLUMN id SET DEFAULT nextval('lemonnotes_champion_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY lemonnotes_realms ALTER COLUMN id SET DEFAULT nextval('lemonnotes_realms_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY lemonnotes_summoner ALTER COLUMN id SET DEFAULT nextval('lemonnotes_summoner_id_seq'::regclass);
+
+
+--
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: chrisf
+--
+
+COPY auth_group (id, name) FROM stdin;
+\.
+
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chrisf
+--
+
+SELECT pg_catalog.setval('auth_group_id_seq', 1, false);
+
+
+--
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: chrisf
+--
+
+COPY auth_group_permissions (id, group_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chrisf
+--
+
+SELECT pg_catalog.setval('auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: chrisf
+--
+
+COPY auth_permission (id, name, content_type_id, codename) FROM stdin;
+1	Can add log entry	1	add_logentry
+2	Can change log entry	1	change_logentry
+3	Can delete log entry	1	delete_logentry
+4	Can add permission	2	add_permission
+5	Can change permission	2	change_permission
+6	Can delete permission	2	delete_permission
+7	Can add group	3	add_group
+8	Can change group	3	change_group
+9	Can delete group	3	delete_group
+10	Can add user	4	add_user
+11	Can change user	4	change_user
+12	Can delete user	4	delete_user
+13	Can add content type	5	add_contenttype
+14	Can change content type	5	change_contenttype
+15	Can delete content type	5	delete_contenttype
+16	Can add session	6	add_session
+17	Can change session	6	change_session
+18	Can delete session	6	delete_session
+19	Can add summoner	7	add_summoner
+20	Can change summoner	7	change_summoner
+21	Can delete summoner	7	delete_summoner
+22	Can add Realms	8	add_realms
+23	Can change Realms	8	change_realms
+24	Can delete Realms	8	delete_realms
+25	Can add champion	9	add_champion
+26	Can change champion	9	change_champion
+27	Can delete champion	9	delete_champion
+\.
+
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chrisf
+--
+
+SELECT pg_catalog.setval('auth_permission_id_seq', 27, true);
+
+
+--
+-- Data for Name: auth_user; Type: TABLE DATA; Schema: public; Owner: chrisf
+--
+
+COPY auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_user_groups; Type: TABLE DATA; Schema: public; Owner: chrisf
+--
+
+COPY auth_user_groups (id, user_id, group_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chrisf
+--
+
+SELECT pg_catalog.setval('auth_user_groups_id_seq', 1, false);
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chrisf
+--
+
+SELECT pg_catalog.setval('auth_user_id_seq', 1, false);
+
+
+--
+-- Data for Name: auth_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: chrisf
+--
+
+COPY auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chrisf
+--
+
+SELECT pg_catalog.setval('auth_user_user_permissions_id_seq', 1, false);
+
+
+--
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: chrisf
+--
+
+COPY django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
+\.
+
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chrisf
+--
+
+SELECT pg_catalog.setval('django_admin_log_id_seq', 1, false);
+
+
+--
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: chrisf
+--
+
+COPY django_content_type (id, name, app_label, model) FROM stdin;
+1	log entry	admin	logentry
+2	permission	auth	permission
+3	group	auth	group
+4	user	auth	user
+5	content type	contenttypes	contenttype
+6	session	sessions	session
+7	summoner	lemonnotes	summoner
+8	Realms	lemonnotes	realms
+9	champion	lemonnotes	champion
+\.
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chrisf
+--
+
+SELECT pg_catalog.setval('django_content_type_id_seq', 9, true);
+
+
+--
+-- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: chrisf
+--
+
+COPY django_migrations (id, app, name, applied) FROM stdin;
+1	contenttypes	0001_initial	2015-03-08 00:51:42.417058-08
+2	auth	0001_initial	2015-03-08 00:51:42.519659-08
+3	admin	0001_initial	2015-03-08 00:51:42.566539-08
+4	lemonnotes	0001_initial	2015-03-08 00:51:42.583007-08
+5	lemonnotes	0002_realms	2015-03-08 00:51:42.595406-08
+6	lemonnotes	0003_auto_20150306_0534	2015-03-08 00:51:42.691355-08
+7	lemonnotes	0004_auto_20150306_0542	2015-03-08 00:51:42.718047-08
+8	lemonnotes	0005_champion	2015-03-08 00:51:42.75196-08
+9	sessions	0001_initial	2015-03-08 00:51:42.770018-08
+\.
+
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chrisf
+--
+
+SELECT pg_catalog.setval('django_migrations_id_seq', 9, true);
+
+
+--
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: chrisf
+--
+
+COPY django_session (session_key, session_data, expire_date) FROM stdin;
+\.
+
+
+--
+-- Data for Name: lemonnotes_champion; Type: TABLE DATA; Schema: public; Owner: chrisf
+--
+
+COPY lemonnotes_champion (id, "idNumber", title, name, key) FROM stdin;
+15	4	the Card Master	Twisted Fate	TwistedFate
+16	8	the Crimson Reaper	Vladimir	Vladimir
+17	120	the Shadow of War	Hecarim	Hecarim
+18	121	the Voidreaver	Kha'Zix	Khazix
+19	122	the Hand of Noxus	Darius	Darius
+20	267	the Tidecaller	Nami	Nami
+21	266	the Darkin Blade	Aatrox	Aatrox
+22	126	the Defender of Tomorrow	Jayce	Jayce
+23	127	the Ice Witch	Lissandra	Lissandra
+24	268	the Emperor of the Sands	Azir	Azir
+25	59	the Exemplar of Demacia	Jarvan IV	JarvanIV
+26	58	the Butcher of the Sands	Renekton	Renekton
+27	55	the Sinister Blade	Katarina	Katarina
+28	54	Shard of the Monolith	Malphite	Malphite
+29	57	the Twisted Treant	Maokai	Maokai
+30	56	the Eternal Nightmare	Nocturne	Nocturne
+31	51	the Sheriff of Piltover	Caitlyn	Caitlyn
+32	50	the Master Tactician	Swain	Swain
+34	412	the Chain Warden	Thresh	Thresh
+35	115	the Hexplosives Expert	Ziggs	Ziggs
+36	114	the Grand Duelist	Fiora	Fiora
+37	117	the Fae Sorceress	Lulu	Lulu
+38	89	the Radiant Dawn	Leona	Leona
+39	111	the Titan of the Depths	Nautilus	Nautilus
+40	110	the Arrow of Retribution	Varus	Varus
+41	113	the Winter's Wrath	Sejuani	Sejuani
+42	112	the Machine Herald	Viktor	Viktor
+43	82	the Master of Metal	Mordekaiser	Mordekaiser
+44	83	the Gravedigger	Yorick	Yorick
+45	80	the Artisan of War	Pantheon	Pantheon
+46	81	the Prodigal Explorer	Ezreal	Ezreal
+47	119	the Glorious Executioner	Draven	Draven
+48	84	the Fist of Shadow	Akali	Akali
+49	85	the Heart of the Tempest	Kennen	Kennen
+50	429	the Spear of Vengeance	Kalista	Kalista
+51	3	the Sentinel's Sorrow	Galio	Galio
+52	7	the Deceiver	LeBlanc	Leblanc
+53	421	the Void Burrower	Rek'Sai	RekSai
+54	102	the Half-Dragon	Shyvana	Shyvana
+55	103	the Nine-Tailed Fox	Ahri	Ahri
+57	106	the Thunder's Roar	Volibear	Volibear
+58	107	the Pridestalker	Rengar	Rengar
+59	104	the Outlaw	Graves	Graves
+60	105	the Tidal Trickster	Fizz	Fizz
+61	39	the Will of the Blades	Irelia	Irelia
+62	38	the Void Walker	Kassadin	Kassadin
+63	33	the Armordillo	Rammus	Rammus
+64	32	the Sad Mummy	Amumu	Amumu
+65	31	the Terror of the Void	Cho'Gath	Chogath
+66	30	the Deathsinger	Karthus	Karthus
+67	37	Maven of the Strings	Sona	Sona
+68	36	the Madman of Zaun	Dr. Mundo	DrMundo
+69	35	the Demon Jester	Shaco	Shaco
+70	34	the Cryophoenix	Anivia	Anivia
+71	60	The Spider Queen	Elise	Elise
+72	61	the Lady of Clockwork	Orianna	Orianna
+74	63	the Burning Vengeance	Brand	Brand
+75	64	the Blind Monk	Lee Sin	LeeSin
+76	67	the Night Hunter	Vayne	Vayne
+77	68	the Mechanized Menace	Rumble	Rumble
+78	69	the Serpent's Embrace	Cassiopeia	Cassiopeia
+79	254	the Piltover Enforcer	Vi	Vi
+80	2	the Berserker	Olaf	Olaf
+81	6	the Headsman's Pride	Urgot	Urgot
+82	99	the Lady of Luminosity	Lux	Lux
+83	98	Eye of Twilight	Shen	Shen
+84	91	the Blade's Shadow	Talon	Talon
+85	90	the Prophet of the Void	Malzahar	Malzahar
+86	92	the Exile	Riven	Riven
+87	222	the Loose Cannon	Jinx	Jinx
+88	96	the Mouth of the Abyss	Kog'Maw	KogMaw
+89	11	the Wuju Bladesman	Master Yi	MasterYi
+90	10	The Judicator	Kayle	Kayle
+91	13	the Rogue Mage	Ryze	Ryze
+92	12	the Minotaur	Alistar	Alistar
+93	15	the Battle Mistress	Sivir	Sivir
+95	17	the Swift Scout	Teemo	Teemo
+96	16	the Starchild	Soraka	Soraka
+97	19	the Blood Hunter	Warwick	Warwick
+98	18	the Yordle Gunner	Tristana	Tristana
+99	150	the Missing Link	Gnar	Gnar
+100	154	the Secret Weapon	Zac	Zac
+101	157	the Unforgiven	Yasuo	Yasuo
+102	238	the Master of Shadows	Zed	Zed
+103	236	the Purifier	Lucian	Lucian
+104	48	the Troll King	Trundle	Trundle
+105	86	The Might of Demacia	Garen	Garen
+106	44	the Gem Knight	Taric	Taric
+107	45	the Tiny Master of Evil	Veigar	Veigar
+108	42	the Daring Bombardier	Corki	Corki
+109	43	the Enlightened One	Karma	Karma
+110	40	the Storm's Fury	Janna	Janna
+112	1	the Dark Child	Annie	Annie
+2	131	Scorn of the Moon	Diana	Diana
+3	134	the Dark Sovereign	Syndra	Syndra
+4	24	Grandmaster at Arms	Jax	Jax
+5	25	Fallen Angel	Morgana	Morgana
+6	26	the Chronokeeper	Zilean	Zilean
+7	27	the Mad Chemist	Singed	Singed
+8	20	the Yeti Rider	Nunu	Nunu
+9	21	the Bounty Hunter	Miss Fortune	MissFortune
+10	22	the Frost Archer	Ashe	Ashe
+11	23	the Barbarian King	Tryndamere	Tryndamere
+12	28	the Widowmaker	Evelynn	Evelynn
+13	29	the Plague Rat	Twitch	Twitch
+1	133	Demacia's Wings	Quinn	Quinn
+14	161	the Eye of the Void	Vel'Koz	Velkoz
+33	53	the Great Steam Golem	Blitzcrank	Blitzcrank
+56	101	the Magus Ascendant	Xerath	Xerath
+73	62	the Monkey King	Wukong	MonkeyKing
+94	14	The Undead Juggernaut	Sion	Sion
+111	41	the Saltwater Scourge	Gangplank	Gangplank
+113	5	the Seneschal of Demacia	Xin Zhao	XinZhao
+114	9	the Harbinger of Doom	Fiddlesticks	FiddleSticks
+115	201	the Heart of the Freljord	Braum	Braum
+116	143	Rise of the Thorns	Zyra	Zyra
+117	77	the Spirit Walker	Udyr	Udyr
+118	76	the Bestial Huntress	Nidalee	Nidalee
+119	75	the Curator of the Sands	Nasus	Nasus
+120	74	the Revered Inventor	Heimerdinger	Heimerdinger
+121	72	the Crystal Vanguard	Skarner	Skarner
+122	79	the Rabble Rouser	Gragas	Gragas
+123	78	the Iron Ambassador	Poppy	Poppy
+\.
+
+
+--
+-- Name: lemonnotes_champion_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chrisf
+--
+
+SELECT pg_catalog.setval('lemonnotes_champion_id_seq', 123, true);
+
+
+--
+-- Data for Name: lemonnotes_realms; Type: TABLE DATA; Schema: public; Owner: chrisf
+--
+
+COPY lemonnotes_realms (id, cdn, css, dd, l, lg, n, profile_icon_max, v, last_updated) FROM stdin;
+1	http://ddragon.leagueoflegends.com/cdn	0.152.55	4.17.1	en_US	0.152.55	{"summoner":"5.4.1","map":"5.4.1","champion":"5.4.1","language":"5.4.1","mastery":"4.17.1","item":"5.4.1","rune":"5.4.1","ui":"5.4.1","profileicon":"5.4.1"}	28	5.4.1	2015-03-08 11:35:11.288009-07
+\.
+
+
+--
+-- Name: lemonnotes_realms_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chrisf
+--
+
+SELECT pg_catalog.setval('lemonnotes_realms_id_seq', 1, false);
+
+
+--
+-- Data for Name: lemonnotes_summoner; Type: TABLE DATA; Schema: public; Owner: chrisf
+--
+
+COPY lemonnotes_summoner (id, "idNumber", name, region) FROM stdin;
+\.
+
+
+--
+-- Name: lemonnotes_summoner_id_seq; Type: SEQUENCE SET; Schema: public; Owner: chrisf
+--
+
+SELECT pg_catalog.setval('lemonnotes_summoner_id_seq', 1, false);
+
+
+--
+-- Name: auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- Name: auth_group_permissions_group_id_permission_id_key; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_permission_id_key UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_permission_content_type_id_codename_key; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_codename_key UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups_user_id_group_id_key; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_group_id_key UNIQUE (user_id, group_id);
+
+
+--
+-- Name: auth_user_pkey; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user
+    ADD CONSTRAINT auth_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions_user_id_permission_id_key; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_permission_id_key UNIQUE (user_id, permission_id);
+
+
+--
+-- Name: auth_user_username_key; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user
+    ADD CONSTRAINT auth_user_username_key UNIQUE (username);
+
+
+--
+-- Name: django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_content_type_app_label_45f3b1d93ec8c61c_uniq; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY django_content_type
+    ADD CONSTRAINT django_content_type_app_label_45f3b1d93ec8c61c_uniq UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY django_migrations
+    ADD CONSTRAINT django_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY django_session
+    ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- Name: lemonnotes_champion_idNumber_key; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY lemonnotes_champion
+    ADD CONSTRAINT "lemonnotes_champion_idNumber_key" UNIQUE ("idNumber");
+
+
+--
+-- Name: lemonnotes_champion_pkey; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY lemonnotes_champion
+    ADD CONSTRAINT lemonnotes_champion_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: lemonnotes_realms_pkey; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY lemonnotes_realms
+    ADD CONSTRAINT lemonnotes_realms_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: lemonnotes_summoner_pkey; Type: CONSTRAINT; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+ALTER TABLE ONLY lemonnotes_summoner
+    ADD CONSTRAINT lemonnotes_summoner_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group_name_253ae2a6331666e8_like; Type: INDEX; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE INDEX auth_group_name_253ae2a6331666e8_like ON auth_group USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions_0e939a4f; Type: INDEX; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE INDEX auth_group_permissions_0e939a4f ON auth_group_permissions USING btree (group_id);
+
+
+--
+-- Name: auth_group_permissions_8373b171; Type: INDEX; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE INDEX auth_group_permissions_8373b171 ON auth_group_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_permission_417f1b1c; Type: INDEX; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE INDEX auth_permission_417f1b1c ON auth_permission USING btree (content_type_id);
+
+
+--
+-- Name: auth_user_groups_0e939a4f; Type: INDEX; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE INDEX auth_user_groups_0e939a4f ON auth_user_groups USING btree (group_id);
+
+
+--
+-- Name: auth_user_groups_e8701ad4; Type: INDEX; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE INDEX auth_user_groups_e8701ad4 ON auth_user_groups USING btree (user_id);
+
+
+--
+-- Name: auth_user_user_permissions_8373b171; Type: INDEX; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE INDEX auth_user_user_permissions_8373b171 ON auth_user_user_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_user_user_permissions_e8701ad4; Type: INDEX; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE INDEX auth_user_user_permissions_e8701ad4 ON auth_user_user_permissions USING btree (user_id);
+
+
+--
+-- Name: auth_user_username_51b3b110094b8aae_like; Type: INDEX; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE INDEX auth_user_username_51b3b110094b8aae_like ON auth_user USING btree (username varchar_pattern_ops);
+
+
+--
+-- Name: django_admin_log_417f1b1c; Type: INDEX; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE INDEX django_admin_log_417f1b1c ON django_admin_log USING btree (content_type_id);
+
+
+--
+-- Name: django_admin_log_e8701ad4; Type: INDEX; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE INDEX django_admin_log_e8701ad4 ON django_admin_log USING btree (user_id);
+
+
+--
+-- Name: django_session_de54fa62; Type: INDEX; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE INDEX django_session_de54fa62 ON django_session USING btree (expire_date);
+
+
+--
+-- Name: django_session_session_key_461cfeaa630ca218_like; Type: INDEX; Schema: public; Owner: chrisf; Tablespace: 
+--
+
+CREATE INDEX django_session_session_key_461cfeaa630ca218_like ON django_session USING btree (session_key varchar_pattern_ops);
+
+
+--
+-- Name: auth_content_type_id_508cf46651277a81_fk_django_content_type_id; Type: FK CONSTRAINT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_content_type_id_508cf46651277a81_fk_django_content_type_id FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissio_group_id_689710a9a73b7457_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissio_group_id_689710a9a73b7457_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permission_id_1f49ccbbdc69d2fc_fk_auth_permission_id; Type: FK CONSTRAINT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permission_id_1f49ccbbdc69d2fc_fk_auth_permission_id FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user__permission_id_384b62483d7071f0_fk_auth_permission_id; Type: FK CONSTRAINT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user__permission_id_384b62483d7071f0_fk_auth_permission_id FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups_group_id_33ac548dcf5f8e37_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_group_id_33ac548dcf5f8e37_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups_user_id_4b5ed4ffdb8fd9b0_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_4b5ed4ffdb8fd9b0_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permiss_user_id_7f0938558328534a_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permiss_user_id_7f0938558328534a_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: djan_content_type_id_697914295151027a_fk_django_content_type_id; Type: FK CONSTRAINT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT djan_content_type_id_697914295151027a_fk_django_content_type_id FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log_user_id_52fdd58701c5f563_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: chrisf
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_user_id_52fdd58701c5f563_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: chrisf
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM chrisf;
+GRANT ALL ON SCHEMA public TO chrisf;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

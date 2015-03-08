@@ -49,7 +49,7 @@
           <td>
             <ul class='most-played-champions-list' data-bind='foreach: mostPlayedChampions'>
               <li class='most-played-champion-data'>
-                <div class='champion-icon' data-bind="attr: {style: $root.styleFromUrl($data[Object.keys($data)[0]].image_url)}"></div>
+                <div class='champion-icon' data-bind="attr: {style: $root.styleFromUrl($data[Object.keys($data)[0]].image_url)}, tooltip: {title: $data[Object.keys($data)[0]].name}"></div>
                 <div data-bind="text: 'Games: ' + $data[Object.keys($data)[0]].games"></div>
                 <div>
                 <span class="wins" data-bind="text: $data[Object.keys($data)[0]].wins"></span>
@@ -62,7 +62,7 @@
           <td>
             <ul class='best-performance-champions-list' data-bind='foreach: bestPerformanceChampions'>
               <li class='best-performance-champion-data'>
-                <div class='champion-icon' data-bind="attr: {style: $root.styleFromUrl($data[Object.keys($data)[0]].image_url)}"></div>
+                <div class='champion-icon' data-bind="attr: {style: $root.styleFromUrl($data[Object.keys($data)[0]].image_url)}, tooltip: {title: $data[Object.keys($data)[0]].name}"></div>
                 <div data-bind="text: 'Games: ' + $data[Object.keys($data)[0]].games"></div>
                 <div>
                 <span class="wins" data-bind="text: $data[Object.keys($data)[0]].wins"></span>

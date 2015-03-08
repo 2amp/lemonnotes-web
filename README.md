@@ -9,12 +9,17 @@ Clone the repo, set up a `virtualenv` if that's your thing, and install the requ
 pip install -r requirements.txt
 ```
 
-`lemonnotes_web` also depends on RabbitMQ as a message broker for Celery. Download and installation instructions can be found at [https://www.rabbitmq.com/download.html](https://www.rabbitmq.com/download.html). On Mac OS X, RabbitMQ can be installed using homebrew:
+`lemonnotes_web` uses Postgres. On Mac OS X, [`Postgres.app`](http://postgresapp.com/) is probably the simplest way to get a Postgres installation. You may also use homebrew to install Postgres:
 ```shell
-brew install rabbitmq
+brew install postgresql
 ```
 
-Start the RabbitMQ server with `rabbitmq-server`. If you installed RabbitMQ using homebrew, you may need to add `/usr/local/sbin` to your `PATH`. Next, start the Celery worker process and the Celery scheduler:
+`lemonnotes_web` also depends on Redis as a message broker for Celery. Download and installation instructions can be found at [http://redis.io/](http://redis.io/). On Mac OS X, Redis can be installed using homebrew:
+```shell
+brew install redis
+```
+
+Start the Redis server with `redis-server`. Next, start the Celery worker process and the Celery scheduler:
 ```python
 celery -A lemonnotes_web worker --loglevel=info
 celery -A lemonnotes_web beat

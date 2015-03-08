@@ -35,10 +35,11 @@ def build_champion_stats(matches):
                                      'kills': kills,
                                      'deaths': deaths,
                                      'assists': assists,
-                                     'cs': cs}
-            playerStats[champion]['image_url'] = utils.image_url(utils.K_LOL_CHAMP_ICON,
-                                                                 Realms.get_solo().n['champion'],
-                                                                 Champion.objects.get(idNumber=champion).key)
+                                     'cs': cs,
+                                     'image_url': utils.image_url(utils.K_LOL_CHAMP_ICON,
+                                                                  Realms.get_solo().n['champion'],
+                                                                  Champion.objects.get(idNumber=champion).key),
+                                     'name': Champion.objects.get(idNumber=champion).name}
         else:
             if winner:
                 playerStats[champion]['wins'] = playerStats[champion]['wins'] + 1

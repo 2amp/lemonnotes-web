@@ -9,6 +9,7 @@ from .models import Realms, Champion
 import requests
 
 
+# @periodic_task(run_every=datetime.timedelta(seconds=5))
 @periodic_task(run_every=datetime.timedelta(days=1))
 def update_realms():
     '''Update realms every day.'''
@@ -28,6 +29,7 @@ def update_realms():
         realms.save()
 
 
+# @periodic_task(run_every=datetime.timedelta(seconds=5))
 @periodic_task(run_every=datetime.timedelta(days=1))
 def update_champion_list():
     '''Update champion list every day.'''
@@ -45,3 +47,12 @@ def update_champion_list():
             else:
                 c = Champion(idNumber=champion['id'], title=champion['title'], name=champion['name'], key=champion['key'])
                 c.save()
+
+
+@shared_task
+def shared_task_update_realms():
+    update_realms()
+
+
+def shared_task_update_champion_list():
+    update_champion_list()

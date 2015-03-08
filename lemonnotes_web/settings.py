@@ -66,10 +66,23 @@ WSGI_APPLICATION = 'lemonnotes_web.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
+# sqlite
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
+# postgres
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'lemonnotes',
+        'USER': 'chrisf',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -138,8 +151,12 @@ LOGGING = {
     },
 }
 
-BROKER_URL = 'amqp://'
-CELERY_RESULT_BACKEND = 'amqp://'
+# rabbitmq
+# BROKER_URL = 'amqp://'
+# CELERY_RESULT_BACKEND = 'amqp://'
+
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
