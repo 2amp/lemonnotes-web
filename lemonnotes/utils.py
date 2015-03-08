@@ -1,5 +1,6 @@
 from lemonnotes_web.keys import RIOT_API_KEY
 
+from math import sqrt
 
 # Taken from LemonNotes/Constants.h
 
@@ -94,7 +95,6 @@ def api_url(call, region, path_param, query_params):
     if query_params:
         for param in query_params:
             query_param = query_param + param + '&'
-    print url
     url = url.format(server=server, region=region, path=path_param, query=query_param)
     return url
 
@@ -106,3 +106,14 @@ def image_url(call, version, key):
     else:
         url = url.format(version=version, key=key)
     return url
+
+
+def wilson_score_interval(ups, downs):
+    n = ups + downs
+
+    if n == 0:
+        return 0
+
+    z = 1.64  # 1.44 = 85%, 1.96 = 95%
+    phat = float(ups) / n
+    return ((phat + z * z / (2 * n) - z * sqrt((phat * (1 - phat) + z * z / (4 * n)) / n)) / (1 + z * z / n))

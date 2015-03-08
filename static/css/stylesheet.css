@@ -21,21 +21,25 @@ tr .name {
     width: 20%;
 }
 
-tr .summonerId {
+tr .ranking {
     width: 10%;
 }
 
 tr .most-played-champions {
-    width: 70%
+    width: 35%
 }
 
-.most-played-champion-data {
+tr .best-performance-champions {
+    width: 35%;
+}
+
+.most-played-champion-data, .best-performance-champion-data {
     display: inline-block;
     font-size: 10px;
     text-align: center;
 }
 
-.most-played-champions-list {
+.most-played-champions-list, .best-performance-champions-list {
     list-style-type: none;
     padding: 0;
     margin-bottom: -6px;

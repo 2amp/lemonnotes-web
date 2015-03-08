@@ -38,6 +38,7 @@
           <th class="name">Name</th>
           <th class="ranking">Ranking</th>
           <th class="most-played-champions">Most played champions</th>
+          <th class="best-performance-champions">Best performance on</th>
         </tr>
       </thead>
       <tbody data-bind="foreach: summoners">
@@ -48,6 +49,19 @@
           <td>
             <ul class='most-played-champions-list' data-bind='foreach: mostPlayedChampions'>
               <li class='most-played-champion-data'>
+                <div class='champion-icon' data-bind="attr: {style: $root.styleFromUrl($data[Object.keys($data)[0]].image_url)}"></div>
+                <div data-bind="text: 'Games: ' + $data[Object.keys($data)[0]].games"></div>
+                <div>
+                <span class="wins" data-bind="text: $data[Object.keys($data)[0]].wins"></span>
+                /
+                <span class="losses" data-bind="text: $data[Object.keys($data)[0]].games - $data[Object.keys($data)[0]].wins"></span>
+                </div>
+              </li>
+            </ul>
+          </td>
+          <td>
+            <ul class='best-performance-champions-list' data-bind='foreach: bestPerformanceChampions'>
+              <li class='best-performance-champion-data'>
                 <div class='champion-icon' data-bind="attr: {style: $root.styleFromUrl($data[Object.keys($data)[0]].image_url)}"></div>
                 <div data-bind="text: 'Games: ' + $data[Object.keys($data)[0]].games"></div>
                 <div>

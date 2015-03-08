@@ -17,6 +17,7 @@ function Summoner() {
   this.ranking = ko.observable('');
   this.stats = ko.observable();
   this.mostPlayedChampions = ko.observableArray();
+  this.bestPerformanceChampions = ko.observableArray();
   this.isDataFetched = ko.observable(false);
 }
 
@@ -54,6 +55,7 @@ function SummonerListViewModel() {
         summoner.summonerId(0);
         summoner.stats(null);
         summoner.mostPlayedChampions(null);
+        summoner.bestPerformanceChampions(null);
         summoner.isDataFetched(false);
         oldSearchFieldValues[index] = '';
         searchFieldSummoner.fetchStatus('none');
@@ -80,6 +82,7 @@ function SummonerListViewModel() {
         summoner.summonerId(0);
         summoner.stats(null);
         summoner.mostPlayedChampions(null);
+        summoner.bestPerformanceChampions(null);
         summoner.isDataFetched(false);
         oldSearchFieldValues[index] = '';
         searchFieldSummoner.fetchStatus('none');
@@ -101,6 +104,7 @@ function SummonerListViewModel() {
         summoner.isDataFetched(true);
         summoner.stats(data.stats);
         summoner.mostPlayedChampions(data.mostPlayedChampions);
+        summoner.bestPerformanceChampions(data.bestPerformanceChampions);
         summoner.ranking(data.soloQueueRankedInfo.tier + ' ' + data.soloQueueRankedInfo.division);
         searchFieldSummoner.fetchStatus('valid');
       })

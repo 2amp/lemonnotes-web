@@ -32,7 +32,7 @@ TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 TEMPLATE_DIRS = [TEMPLATE_PATH, ]
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '127.0.0.1:8000', 'localhost:8000', '*', ]
-ADMINS = (('Christopher Fu', 'chrisf8442@gmail.com'),)
+# ADMINS = (('Christopher Fu', 'chrisf8442@gmail.com'),)
 
 # Application definition
 

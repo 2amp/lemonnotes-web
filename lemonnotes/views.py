@@ -15,7 +15,7 @@ def index(request):
 
 
 def build_champion_stats(matches):
-    '''Compiles stats for each summoner by champion ID as a dict with the following format:
+    '''Returns a dict of the stats for each champion by champion ID with the following format:
     {'1': {'wins': 10, 'games': 20, 'kills': 100, 'deaths': 100, 'assists': 100, 'cs': 100}}'''
     playerStats = {}
     for match in matches:
@@ -39,7 +39,6 @@ def build_champion_stats(matches):
             playerStats[champion]['image_url'] = utils.image_url(utils.K_LOL_CHAMP_ICON,
                                                                  Realms.get_solo().n['champion'],
                                                                  Champion.objects.get(idNumber=champion).key)
-            print playerStats[champion]['image_url']
         else:
             if winner:
                 playerStats[champion]['wins'] = playerStats[champion]['wins'] + 1
@@ -52,15 +51,23 @@ def build_champion_stats(matches):
 
 
 def most_played_champions_stats(champion_stats, number=5):
-    '''Gets the stat dicts for the most played champions.'''
+    '''Returns an array of stat dicts for the most played champions, sorted by the most played first.'''
     return map(lambda x: dict((x,)), sorted(champion_stats.items(), key=lambda x: x[1]['games'], reverse=True)[:5])
+
+
+def best_performance_champions_stats(champion_stats, number=5):
+    '''Returns an array of stat dicts for the champions on which the summoner has best performed.'''
+    for (k, champion_stat) in champion_stats.items():
+        champion_stat['wilson'] = utils.wilson_score_interval(champion_stat['wins'], champion_stat['games'] - champion_stat['wins'])
+    return map(lambda x: dict((x,)), sorted(champion_stats.items(),
+               key=lambda x: utils.wilson_score_interval(x[1]['wins'], x[1]['games'] - x[1]['wins']), reverse=True)[:5])
 
 
 def get_match_history(region, summoner_id, begin, end):
     '''Gets the match history for a summoner given a begin and end index. This function can only fetch 15 matches at a
-    time.'''
+    time. Returns an empty array if the bounds are invalid, the request fails, or there are no matches returned.'''
     if begin > end:
-        return None
+        return []
     print 'get_match_history(' + str(begin) + ', ' + str(end) + ')'
     begin_index = 'beginIndex=' + str(begin)
     end_index = 'endIndex=' + str(end)
@@ -92,6 +99,10 @@ def get_matches_for_summoner(summoner_id, number_of_matches=15):
 
 
 def get_solo_queue_ranked_info(summoner_id):
+    '''Returns a dict that describes the solo queue ranked info of the summoner with the given summoner ID with the
+    following format: {'tier': tier, 'division': division}. Valid values of tier are 'Unranked', 'Bronze', 'Silver',
+    'Gold', 'Platinum', 'Diamond', 'Master', and 'Challenger'. Valid values of division are 'I', 'II', 'III', 'IV', and
+    'V' '''
     solo_queue_ranked_info = {'tier': 'Unranked', 'division': ''}
     url = utils.api_url(utils.K_LOL_LEAGUE_SUMMONER_ENTRY, 'na', summoner_id, None)
     print url
@@ -111,7 +122,10 @@ def get_solo_queue_ranked_info(summoner_id):
 
 
 def find_summoner(request):
-    '''Gets the summoner info dict.'''
+    '''Gets the summoner info dict if the request is a GET and returns an HttpResponse with the most recently played
+    matches (currently the last 50 played, but this should be user-specified in the future), a dict returned by
+    most_played_champions_stats() that contains stats for the most played champions, and a dict returned by
+    solo_queue_ranked_info() that contains the league info for the summoner.'''
     if request.method == 'GET':
         summoner_name = request.GET['summoner_name']
         if len(summoner_name) > 0:
@@ -129,9 +143,10 @@ def find_summoner(request):
                 champion_stats = build_champion_stats(matches)
                 most_played_champions = most_played_champions_stats(champion_stats)
                 solo_queue_ranked_info = get_solo_queue_ranked_info(summoner_info['id'])
-                response['championStats'] = champion_stats
+                best_performance_champions = best_performance_champions_stats(champion_stats)
                 response['mostPlayedChampions'] = most_played_champions
                 response['soloQueueRankedInfo'] = solo_queue_ranked_info
+                response['bestPerformanceChampions'] = best_performance_champions
                 return HttpResponse(json.dumps(response))
             else:
                 print 'API call error! ' + str(r.status_code)
