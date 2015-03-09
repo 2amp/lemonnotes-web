@@ -75,16 +75,22 @@ WSGI_APPLICATION = 'lemonnotes_web.wsgi.application'
 # }
 
 # postgres
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'lemonnotes',
-        'USER': 'chrisf',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'lemonnotes',
+#         'USER': 'chrisf',
+#         'PASSWORD': '',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
+
+# heroku postgres
+# Parse database configuration from $DATABASE_URL
+import dj_database_url
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config()
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -155,6 +161,7 @@ LOGGING = {
 # BROKER_URL = 'amqp://'
 # CELERY_RESULT_BACKEND = 'amqp://'
 
+# redis
 BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
