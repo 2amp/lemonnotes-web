@@ -25,9 +25,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # heroku
 SECRET_KEY = os.environ['SECRET_KEY']
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
+# SECURITY /WARNING: don't run with debug turned on in production!
+# DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 # TEMPLATE_DEBUG = False
@@ -114,6 +114,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = STATIC_PATH
 STATICFILES_DIRS = (
     STATIC_PATH,
 )
