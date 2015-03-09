@@ -19,8 +19,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 # with open(os.path.join(BASE_DIR, 'lemonnotes_web', 'secret_key.txt')) as f:
 #     SECRET_KEY = f.read().strip()
-import keys
-SECRET_KEY = keys.SECRET_KEY
+# import keys
+# SECRET_KEY = keys.SECRET_KEY
+
+# heroku
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

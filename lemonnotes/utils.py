@@ -1,5 +1,5 @@
-from lemonnotes_web.keys import RIOT_API_KEY
-
+# from lemonnotes_web.keys import RIOT_API_KEY
+import os
 from math import sqrt
 
 # Taken from LemonNotes/Constants.h
@@ -79,6 +79,9 @@ K_LOL_CHAMP_SPLASH = DDRAGON + '/img/champion/splash/{key}_0.jpg'
 K_LOL_CHAMP_ICON = DDRAGON + '/{version}/img/champion/{key}.png'
 K_LOL_SPELL_ICON = DDRAGON + '/{version}/img/spell/{key}.png'
 K_LOL_ITEM_ICON = DDRAGON + '/{version}/img/item/{key}.png'
+
+# heroku
+RIOT_API_KEY = os.environ['RIOT_API_KEY']
 
 
 def api_url(call, region, path_param, query_params):
