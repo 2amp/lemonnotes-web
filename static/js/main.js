@@ -26,6 +26,9 @@ function SummonerListViewModel() {
   self.searchFieldSummoners = ko.observableArray();
   self.summoners = ko.observableArray();
 
+  self.matchesToFetchOptions = ko.observableArray([20, 40, 60, 80, 100]);
+  self.matchesToFetch = ko.observable(40);
+
   for (var i = 0; i < NUMBER_OF_SUMMONERS; i++) {
     self.searchFieldSummoners.push(new SearchFieldSummoner());
     self.summoners.push(new Summoner());
@@ -95,7 +98,7 @@ function SummonerListViewModel() {
     var searchFieldSummoner = self.searchFieldSummoners()[index];
     var summoner = self.summoners()[index];
     console.log('Sending request!');
-    $.get('/lemonnotes/find_summoner/', {summoner_name: searchFieldSummoner.name()})
+    $.get('/lemonnotes/find_summoner/', {summoner_name: searchFieldSummoner.name(), matches_to_fetch: self.matchesToFetch()})
       .done(function(data) {
         if (data) {
           console.log($.parseJSON(data));

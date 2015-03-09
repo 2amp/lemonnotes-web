@@ -139,7 +139,7 @@ def find_summoner(request):
                 r = requests.get(url)
             if r.status_code == requests.codes.ok:
                 summoner_info = r.json().itervalues().next()
-                matches = get_matches_for_summoner(summoner_info['id'], 50)
+                matches = get_matches_for_summoner(summoner_info['id'], int(request.GET['matches_to_fetch']))
                 response = r.json().itervalues().next()
                 champion_stats = build_champion_stats(matches)
                 most_played_champions = most_played_champions_stats(champion_stats)

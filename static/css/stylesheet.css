@@ -6,10 +6,10 @@
     margin-right: 5px;
 }
 
-.summoner-search-field i {
-    margin-top: -24px;
-    margin-right: 6px;
-    float: right;
+.matches-to-fetch {
+    position: relative;
+    display: inline-block;
+    top: -1px;
 }
 
 .start-game {
