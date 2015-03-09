@@ -3,13 +3,23 @@ from django.http import HttpResponse
 import requests
 import json
 from lemonnotes import utils
-from lemonnotes.models import Realms, Champion
+from .models import Realms, Champion
+from .tasks import update_realms, update_champion_list
 from time import sleep
+from datetime import datetime
+import pytz
 
 # Create your views here.
 
 
 def index(request):
+    realms = Realms.get_solo()
+    # This should be done using a celery worker, but I'm poor and can only use 1 heroku dyno.
+    utc = pytz.UTC
+    if (utc.localize(datetime.now()) - realms.last_updated).days > 1:
+        print 'Updating!'
+        update_realms()
+        update_champion_list()
     context_dict = {}
     return render(request, 'lemonnotes/index.html', context_dict)
 
