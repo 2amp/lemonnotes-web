@@ -7,13 +7,18 @@
   Index
 {% endblock title %}
 
+{% block head_block %}
+  <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/stylesheet_index.css' %}">
+{% endblock head_block %}
+
 {% block body_block %}
   <div class="page-header">
     <h1>
       LemonNotes
     </h1>
   </div>
-  <form id="summoner-search" method="post" action="{% url 'find_summoner' %}">
+  <form id="summoner-search" method="post" action="{% url 'start_game' %}">
     {% csrf_token %}
     <div class="form-group summoner-search-fields" data-bind="foreach: searchFieldSummoners">
       <div class="summoner-search-field">
@@ -79,3 +84,8 @@
     </table>
   </div>
 {% endblock body_block %}
+
+{% block js_files %}
+  <script type="text/javascript" src="{% static 'js/main_index.js' %}"></script>
+{% endblock js_files %}
+<script type="text/javascript" src="{% static 'js/main_index.js' %}"></script>

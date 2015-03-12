@@ -132,7 +132,7 @@ def get_solo_queue_ranked_info(summoner_id):
     return solo_queue_ranked_info
 
 
-def find_summoner(request):
+def start_game(request):
     '''Gets the summoner info dict if the request is a GET and returns an HttpResponse with the most recently played
     matches (currently the last 50 played, but this should be user-specified in the future), a dict returned by
     most_played_champions_stats() that contains stats for the most played champions, and a dict returned by
@@ -164,4 +164,4 @@ def find_summoner(request):
                 return HttpResponse({})
     else:
         print '>>> Form POST!'
-        return HttpResponse()
+        return render(request, 'lemonnotes/start_game.html', {})

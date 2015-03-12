@@ -1,0 +1,80 @@
+.summoner-search-fields {
+    display: inline-flex;
+}
+
+.summoner-search-field {
+    margin-right: 5px;
+}
+
+.matches-to-fetch {
+    position: relative;
+    display: inline-block;
+    top: -1px;
+}
+
+.start-game {
+    margin-top: -3px;
+    margin-left: -4px;
+}
+
+tr .name {
+    width: 20%;
+}
+
+tr .ranking {
+    width: 10%;
+}
+
+tr .most-played-champions {
+    width: 35%
+}
+
+tr .best-performance-champions {
+    width: 35%;
+}
+
+.most-played-champion-data, .best-performance-champion-data {
+    display: inline-block;
+    font-size: 10px;
+    text-align: center;
+}
+
+.most-played-champions-list, .best-performance-champions-list {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: -6px;
+}
+
+.champion-icon {
+    height: 50px;
+    width: 50px;
+    background-size: 50px;
+}
+
+th {
+    text-align: center;
+}
+
+td {
+    text-align: center;
+}
+
+.summoner-search-field-valid {
+    border-color: green !important;
+}
+
+.summoner-search-field-invalid {
+    border-color: red !important;
+}
+
+.summoner-search-field-fetching {
+    border-color: orange !important;
+}
+
+.wins {
+    color: green;
+}
+
+.losses {
+    color: red;
+}

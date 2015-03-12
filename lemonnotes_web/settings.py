@@ -27,7 +27,11 @@ SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY /WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = False
+# DEBUG = False
+if os.environ['DJANGO_DEBUG'] == 'true':
+    DEBUG = True
+else:
+    DEBUG = False
 
 TEMPLATE_DEBUG = True
 # TEMPLATE_DEBUG = False
@@ -77,23 +81,23 @@ WSGI_APPLICATION = 'lemonnotes_web.wsgi.application'
 #     }
 # }
 
-# postgres
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'lemonnotes',
-#         'USER': 'chrisf',
-#         'PASSWORD': '',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-# }
-
 # heroku postgres
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
-DATABASES = {}
-DATABASES['default'] = dj_database_url.config()
+if os.environ['DJANGO_DEV'] == 'true':
+    # postgres
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'lemonnotes',
+            'USER': 'chrisf',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
+else:
+    DATABASES = {'default': dj_database_url.config()}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -114,7 +118,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
-STATIC_ROOT = STATIC_PATH
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (
     STATIC_PATH,
 )

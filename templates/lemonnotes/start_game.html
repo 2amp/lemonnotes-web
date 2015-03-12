@@ -1,0 +1,67 @@
+{% extends 'lemonnotes/base.html' %}
+<!-- -*- mode: html (django) -*- -->
+
+{% load staticfiles %}
+
+{% block title %}
+  Start Game!
+{% endblock title %}
+
+{% block head_block %}
+  <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/stylesheet_start_game.css' %}">
+{% endblock head_block %}
+
+{% block body_block %}
+  <div class="page-header">
+    <h1>
+      LemonNotes
+    </h1>
+  </div>
+  <div class="col-md-10">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="name">Name</th>
+          <th class="ranking">Ranking</th>
+          <th class="most-played-champions">Most played champions</th>
+          <th class="best-performance-champions">Best performance on</th>
+        </tr>
+      </thead>
+      <tbody data-bind="foreach: summoners">
+        <tr data-bind="visible: isDataFetched()">
+          <td data-bind="text: name"></td>
+          <td data-bind="text: ranking"></td>
+          <!-- ko if: mostPlayedChampions -->
+          <td>
+            <ul class='most-played-champions-list' data-bind='foreach: mostPlayedChampions'>
+              <li class='most-played-champion-data'>
+                <div class='champion-icon' data-bind="attr: {style: $root.styleFromUrl($data[Object.keys($data)[0]].image_url)}, tooltip: {title: $data[Object.keys($data)[0]].name}"></div>
+                <div data-bind="text: 'Games: ' + $data[Object.keys($data)[0]].games"></div>
+                <div>
+                <span class="wins" data-bind="text: $data[Object.keys($data)[0]].wins"></span>
+                /
+                <span class="losses" data-bind="text: $data[Object.keys($data)[0]].games - $data[Object.keys($data)[0]].wins"></span>
+                </div>
+              </li>
+            </ul>
+          </td>
+          <td>
+            <ul class='best-performance-champions-list' data-bind='foreach: bestPerformanceChampions'>
+              <li class='best-performance-champion-data'>
+                <div class='champion-icon' data-bind="attr: {style: $root.styleFromUrl($data[Object.keys($data)[0]].image_url)}, tooltip: {title: $data[Object.keys($data)[0]].name}"></div>
+                <div data-bind="text: 'Games: ' + $data[Object.keys($data)[0]].games"></div>
+                <div>
+                <span class="wins" data-bind="text: $data[Object.keys($data)[0]].wins"></span>
+                /
+                <span class="losses" data-bind="text: $data[Object.keys($data)[0]].games - $data[Object.keys($data)[0]].wins"></span>
+                </div>
+              </li>
+            </ul>
+          </td>
+          <!-- /ko -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+{% endblock body_block %}
