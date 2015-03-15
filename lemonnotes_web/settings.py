@@ -83,7 +83,6 @@ WSGI_APPLICATION = 'lemonnotes_web.wsgi.application'
 
 # heroku postgres
 # Parse database configuration from $DATABASE_URL
-import dj_database_url
 if os.environ['DJANGO_DEV'] == 'true':
     # postgres
     DATABASES = {
@@ -97,7 +96,16 @@ if os.environ['DJANGO_DEV'] == 'true':
         }
     }
 else:
-    DATABASES = {'default': dj_database_url.config()}
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'lemonnotes',
+            'USER': 'lemonnotes',
+            'PASSWORD': 'bEs-vOd-gIek-um',
+            'HOST': 'lemonnotes.cus7wpbno7yz.us-west-1.rds.amazonaws.com:5432',
+            'PORT': '5432'
+        }
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
