@@ -753,11 +753,13 @@ COPY django_session (session_key, session_data, expire_date) FROM stdin;
 --
 
 COPY lemonnotes_champion (id, "idNumber", title, name, key) FROM stdin;
-15	4	the Card Master	Twisted Fate	TwistedFate
-16	8	the Crimson Reaper	Vladimir	Vladimir
-17	120	the Shadow of War	Hecarim	Hecarim
-18	121	the Voidreaver	Kha'Zix	Khazix
-19	122	the Hand of Noxus	Darius	Darius
+6	26	the Chronokeeper	Zilean	Zilean
+7	27	the Mad Chemist	Singed	Singed
+8	20	the Yeti Rider	Nunu	Nunu
+9	21	the Bounty Hunter	Miss Fortune	MissFortune
+10	22	the Frost Archer	Ashe	Ashe
+11	23	the Barbarian King	Tryndamere	Tryndamere
+12	28	the Widowmaker	Evelynn	Evelynn
 20	267	the Tidecaller	Nami	Nami
 21	266	the Darkin Blade	Aatrox	Aatrox
 22	126	the Defender of Tomorrow	Jayce	Jayce
@@ -850,21 +852,12 @@ COPY lemonnotes_champion (id, "idNumber", title, name, key) FROM stdin;
 3	134	the Dark Sovereign	Syndra	Syndra
 4	24	Grandmaster at Arms	Jax	Jax
 5	25	Fallen Angel	Morgana	Morgana
-6	26	the Chronokeeper	Zilean	Zilean
-7	27	the Mad Chemist	Singed	Singed
-8	20	the Yeti Rider	Nunu	Nunu
-9	21	the Bounty Hunter	Miss Fortune	MissFortune
-10	22	the Frost Archer	Ashe	Ashe
-11	23	the Barbarian King	Tryndamere	Tryndamere
-12	28	the Widowmaker	Evelynn	Evelynn
 13	29	the Plague Rat	Twitch	Twitch
-1	133	Demacia's Wings	Quinn	Quinn
-14	161	the Eye of the Void	Vel'Koz	Velkoz
-33	53	the Great Steam Golem	Blitzcrank	Blitzcrank
-56	101	the Magus Ascendant	Xerath	Xerath
-73	62	the Monkey King	Wukong	MonkeyKing
-94	14	The Undead Juggernaut	Sion	Sion
-111	41	the Saltwater Scourge	Gangplank	Gangplank
+15	4	the Card Master	Twisted Fate	TwistedFate
+16	8	the Crimson Reaper	Vladimir	Vladimir
+17	120	the Shadow of War	Hecarim	Hecarim
+18	121	the Voidreaver	Kha'Zix	Khazix
+19	122	the Hand of Noxus	Darius	Darius
 113	5	the Seneschal of Demacia	Xin Zhao	XinZhao
 114	9	the Harbinger of Doom	Fiddlesticks	FiddleSticks
 115	201	the Heart of the Freljord	Braum	Braum
@@ -876,6 +869,13 @@ COPY lemonnotes_champion (id, "idNumber", title, name, key) FROM stdin;
 121	72	the Crystal Vanguard	Skarner	Skarner
 122	79	the Rabble Rouser	Gragas	Gragas
 123	78	the Iron Ambassador	Poppy	Poppy
+1	133	Demacia's Wings	Quinn	Quinn
+14	161	the Eye of the Void	Vel'Koz	Velkoz
+33	53	the Great Steam Golem	Blitzcrank	Blitzcrank
+56	101	the Magus Ascendant	Xerath	Xerath
+73	62	the Monkey King	Wukong	MonkeyKing
+94	14	The Undead Juggernaut	Sion	Sion
+111	41	the Saltwater Scourge	Gangplank	Gangplank
 \.
 
 
@@ -891,7 +891,7 @@ SELECT pg_catalog.setval('lemonnotes_champion_id_seq', 123, true);
 --
 
 COPY lemonnotes_realms (id, cdn, css, dd, l, lg, n, profile_icon_max, v, last_updated) FROM stdin;
-1	http://ddragon.leagueoflegends.com/cdn	0.152.55	4.17.1	en_US	0.152.55	{"summoner":"5.4.1","map":"5.4.1","champion":"5.4.1","language":"5.4.1","mastery":"4.17.1","item":"5.4.1","rune":"5.4.1","ui":"5.4.1","profileicon":"5.4.1"}	28	5.4.1	2015-03-08 11:35:11.288009-07
+1	http://ddragon.leagueoflegends.com/cdn	0.152.55	4.17.1	en_US	0.152.55	{"summoner":"5.4.1","map":"5.4.1","champion":"5.4.1","language":"5.4.1","mastery":"4.17.1","item":"5.4.1","rune":"5.4.1","ui":"5.4.1","profileicon":"5.4.1"}	28	5.4.1	2015-03-11 17:46:40.264799-07
 \.
 
 
