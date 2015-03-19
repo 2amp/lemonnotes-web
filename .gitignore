@@ -5,3 +5,4 @@ keys.py
 *.log
 celerybeat-schedule
 celerybeat.pid
+dump.rdb

@@ -39,3 +39,18 @@ class Champion(models.Model):
 
     class Meta:
             verbose_name_plural = "Champions"
+
+
+class ChampionMatchup(models.Model):
+    champion = models.CharField(max_length=128, default='')
+    role = models.CharField(max_length=16, default='')
+    champions_that_counter = JSONField(default=[])
+    champions_that_this_counters = JSONField(default=[])
+    support_adcs_that_counter = JSONField(default=[])
+    support_adcs_that_synergize_poorly = JSONField(default=[])
+    support_adcs_that_this_counters = JSONField(default=[])
+    support_adcs_that_synergize_well = JSONField(default=[])
+    adc_supports_that_counter = JSONField(default=[])
+    adc_supports_that_synergize_poorly = JSONField(default=[])
+    adc_supports_that_this_counters = JSONField(default=[])
+    adc_supports_that_synergize_well = JSONField(default=[])

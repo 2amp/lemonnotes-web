@@ -1,12 +1,21 @@
 from __future__ import absolute_import
 
-from celery import shared_task
+from lemonnotes_web.celery import app
 from celery.decorators import periodic_task
 import datetime
 
 from lemonnotes import utils
-from .models import Realms, Champion
+from .models import Realms, Champion, ChampionMatchup
 import requests
+
+import os
+import json
+from twisted.internet import reactor
+from scrapy.crawler import Crawler
+from scrapy import log, signals, project
+from championgg.spiders.championgg_spider import ChampionGgSpider
+from scrapy.utils.project import get_project_settings
+from billiard import Process
 
 
 # @periodic_task(run_every=datetime.timedelta(seconds=5))
@@ -49,10 +58,74 @@ def update_champion_list():
                 c.save()
 
 
-@shared_task
+@app.task
 def shared_task_update_realms():
     update_realms()
 
 
+@app.task
 def shared_task_update_champion_list():
     update_champion_list()
+
+
+class UrlCrawlerScript(Process):
+    def __init__(self, spider):
+        Process.__init__(self)
+        os.chdir('championgg')
+        if os.path.exists('championgg.json'):
+            os.remove('championgg.json')
+        settings = get_project_settings()
+        self.crawler = Crawler(settings)
+
+        if not hasattr(project, 'crawler'):
+            self.crawler.install()
+            self.crawler.configure()
+            self.crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
+        self.spider = spider
+
+    def run(self):
+        self.crawler.crawl(self.spider)
+        self.crawler.start()
+        reactor.run()
+
+
+def add_matchups_to_db():
+    with open('championgg.json', 'r') as f:
+        matchups = json.load(f)
+        for matchup in matchups:
+            if ChampionMatchup.objects.filter(champion=matchup['champion'], role=matchup['role']).exists():
+                cm = ChampionMatchup.objects.get(champion=matchup['champion'], role=matchup['role'])
+                cm.champions_that_counter = matchup['champions_that_counter']
+                cm.champions_that_this_counters = matchup['champions_that_this_counters']
+                cm.support_adcs_that_counter = matchup.get('support_adcs_that_counter', [])
+                cm.support_adcs_that_synergize_poorly = matchup.get('support_adcs_that_synergize_poorly', [])
+                cm.support_adcs_that_this_counters = matchup.get('support_adcs_that_this_counters', [])
+                cm.support_adcs_that_synergize_well = matchup.get('support_adcs_that_synergize_well', [])
+                cm.adc_supports_that_counter = matchup.get('adc_supports_that_counter', [])
+                cm.adc_supports_that_synergize_poorly = matchup.get('adc_supports_that_synergize_poorly', [])
+                cm.adc_supports_that_this_counters = matchup.get('adc_supports_that_this_counters', [])
+                cm.adc_supports_that_synergize_well = matchup.get('adc_supports_that_synergize_well', [])
+                cm.save()
+            else:
+                cm = ChampionMatchup(champion=matchup['champion'],
+                                     role=matchup['role'],
+                                     champions_that_counter=matchup['champions_that_counter'],
+                                     champions_that_this_counters=matchup['champions_that_this_counters'],
+                                     support_adcs_that_counter=matchup.get('support_adcs_that_counter', []),
+                                     support_adcs_that_synergize_poorly=matchup.get('support_adcs_that_synergize_poorly', []),
+                                     support_adcs_that_this_counters=matchup.get('support_adcs_that_this_counters', []),
+                                     support_adcs_that_synergize_well=matchup.get('support_adcs_that_synergize_well', []),
+                                     adc_supports_that_counter=matchup.get('adc_supports_that_counter', []),
+                                     adc_supports_that_synergize_poorly=matchup.get('adc_supports_that_synergize_poorly', []),
+                                     adc_supports_that_this_counters=matchup.get('adc_supports_that_this_counters', []),
+                                     adc_supports_that_synergize_well=matchup.get('adc_supports_that_synergize_well', []))
+                cm.save()
+
+
+@periodic_task(run_every=datetime.timedelta(days=1))
+def run_spider():
+    spider = ChampionGgSpider()
+    crawler = UrlCrawlerScript(spider)
+    crawler.start()
+    crawler.join()
+    add_matchups_to_db()
