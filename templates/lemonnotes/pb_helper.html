@@ -1,0 +1,53 @@
+{% extends 'lemonnotes/base.html' %}
+<!-- -*- mode: html (django) -*- -->
+
+{% load staticfiles %}
+
+{% block title %}
+  Start Game!
+{% endblock title %}
+
+{% block head_block %}
+  <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/stylesheet_pb_helper.css' %}">
+{% endblock head_block %}
+
+{% block body_block %}
+  <div class="page-header">
+    <h1>
+      LemonNotes
+    </h1>
+  </div>
+  <div class="col-md-10">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="name">Name</th>
+          <th class="matchup">Matchup info</th>
+        </tr>
+      </thead>
+      <tbody data-bind="foreach: matchups">
+        <tr data-bind="visible: summonerName">
+          <td>
+            <div class="summoner-name" data-bind="text: summonerName">Test</div>
+            <div>
+              <ul class="nav nav-list">
+                <form>
+                  <li><input class="form-control champion-pick" type="text" name="suggestion" value="" id="suggestion"></li><br>
+                </form>
+              </ul>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+{% endblock body_block %}
+
+{% block js_files %}
+  <script type="text/javascript">
+  var summonerNames = {{ summonerNames|safe }};
+  </script>
+  <script type="text/javascript" src="{% static 'js/main_pb_helper.js' %}"></script>
+{% endblock js_files %}

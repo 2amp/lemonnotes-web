@@ -132,7 +132,7 @@ def get_solo_queue_ranked_info(summoner_id):
     return solo_queue_ranked_info
 
 
-def start_game(request):
+def summoner_stats(request):
     '''Gets the summoner info dict if the request is a GET and returns an HttpResponse with the most recently played
     matches (currently the last 50 played, but this should be user-specified in the future), a dict returned by
     most_played_champions_stats() that contains stats for the most played champions, and a dict returned by
@@ -162,6 +162,14 @@ def start_game(request):
             else:
                 print 'API call error! ' + str(r.status_code)
                 return HttpResponse({})
-    else:
+
+
+def pb_helper(request):
+    if request.method == 'POST':
         print '>>> Form POST!'
-        return render(request, 'lemonnotes/start_game.html', {})
+        print request.POST
+        return render(request, 'lemonnotes/pb_helper.html', {'summonerNames': request.POST['summonerNames']})
+
+
+def champion_list(request):
+    return HttpResponse(json.dumps(sorted([champion.name for champion in Champion.objects.all()])))

@@ -1,0 +1,11 @@
+th.name {
+    width: 30%;
+}
+
+th.matchup {
+    width: 70%;
+}
+
+.summoner-name {
+    text-align: center;
+}

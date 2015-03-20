@@ -98,7 +98,7 @@ function SummonerListViewModel() {
     var searchFieldSummoner = self.searchFieldSummoners()[index];
     var summoner = self.summoners()[index];
     console.log('Sending request!');
-    $.get('/lemonnotes/start_game/', {summoner_name: searchFieldSummoner.name(), matches_to_fetch: self.matchesToFetch()})
+    $.get('/lemonnotes/summoner_stats/', {'summoner_name': searchFieldSummoner.name(), 'matches_to_fetch': self.matchesToFetch()})
       .done(function(data) {
         if (data) {
           console.log($.parseJSON(data));
@@ -128,3 +128,15 @@ function SummonerListViewModel() {
 }
 
 ko.applyBindings(new SummonerListViewModel());
+
+$(document).ready(function() {
+  $('#summoner-search').submit(function() {
+    var summonerArray = [];
+    for (var i = 0 ; i < NUMBER_OF_SUMMONERS; i++) {
+      summonerArray.push($('.summoner-name')[i].value);
+    }
+    // add summoner names to POST data
+
+    $('<input>').attr('type', 'hidden').attr('name', 'summonerNames').val(JSON.stringify(summonerArray)).appendTo('#summoner-search');
+  });
+});

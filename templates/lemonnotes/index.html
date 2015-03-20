@@ -18,12 +18,12 @@
       LemonNotes
     </h1>
   </div>
-  <form id="summoner-search" method="post" action="{% url 'start_game' %}">
+  <form id="summoner-search" method="post" action="{% url 'pb_helper' %}">
     {% csrf_token %}
     <div class="form-group summoner-search-fields" data-bind="foreach: searchFieldSummoners">
       <div class="summoner-search-field">
-        <label for="summoner_1_name" class="sr-only">Summoner name</label>
-        <input type="text" class="form-control summoner_name" data-bind="textInput: name,
+        <label for="summoner-1-name" class="sr-only">Summoner name</label>
+        <input type="text" class="form-control summoner-name" data-bind="textInput: name,
                                                                          attr: {placeholder: 'Summoner ' + ($index() + 1).toString()},
                                                                          event: {focusout: function(data, event) {$root.updateOnFocusout($index(), data, event)}, keypress: function(data, event) {return $root.updateOnEnter($index(), data, event)}},
                                                                          css: {
