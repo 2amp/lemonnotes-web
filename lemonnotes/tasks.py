@@ -16,6 +16,7 @@ from scrapy import log, signals, project
 from championgg.spiders.championgg_spider import ChampionGgSpider
 from scrapy.utils.project import get_project_settings
 from billiard import Process
+from subprocess import call
 
 
 # @periodic_task(run_every=datetime.timedelta(seconds=5))
@@ -122,10 +123,20 @@ def add_matchups_to_db():
                 cm.save()
 
 
-@periodic_task(run_every=datetime.timedelta(days=1))
+# @periodic_task(run_every=datetime.timedelta(days=1))
 def run_spider():
+    print os.getcwd()
     spider = ChampionGgSpider()
     crawler = UrlCrawlerScript(spider)
     crawler.start()
     crawler.join()
     add_matchups_to_db()
+    os.chdir('..')
+
+
+# ugly hack
+@periodic_task(run_every=datetime.timedelta(days=1))
+def run_spider2():
+    os.chdir('championgg')
+    call(['scrapy', 'crawl', 'championgg'])
+    os.chdir('..')
