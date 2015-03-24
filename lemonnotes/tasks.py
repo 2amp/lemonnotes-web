@@ -139,4 +139,5 @@ def run_spider():
 def run_spider2():
     os.chdir('championgg')
     call(['scrapy', 'crawl', 'championgg'])
+    add_matchups_to_db()
     os.chdir('..')
