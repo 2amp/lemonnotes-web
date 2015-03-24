@@ -20,3 +20,6 @@ NEWSPIDER_MODULE = 'championgg.spiders'
 
 FEED_URI = os.path.join(os.getcwd(), 'championgg.json')
 FEED_FORMAT = 'json'
+
+LOG_STDOUT = True
+LOG_FILE = 'championgg.log'
