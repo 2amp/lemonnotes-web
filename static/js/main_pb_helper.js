@@ -65,8 +65,7 @@ function MatchupViewModel() {
     $.get('/lemonnotes/champion_matchup/', {'champion': championPick.championName(), 'role': championPick.role()})
       .done(function(data) {
         if (data) {
-          console.log($.parseJSON(data));
-          data = $.parseJSON(data);
+          console.log(data);
           championPick.fetchStatus('valid');
         } else {
           console.log('error!');
@@ -84,7 +83,7 @@ ko.applyBindings(new MatchupViewModel());
 
 $(document).ready(function() {
   $.get('/lemonnotes/champion_list/').done(function(data) {
-    var champions = JSON.parse(data);
+    var champions = data;
     $('.champion-pick').each(function() {
       $(this).autocomplete({source: champions});
     });

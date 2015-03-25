@@ -159,7 +159,7 @@ def summoner_stats(request):
                 response['mostPlayedChampions'] = most_played_champions
                 response['soloQueueRankedInfo'] = solo_queue_ranked_info
                 response['bestPerformanceChampions'] = best_performance_champions
-                return HttpResponse(json.dumps(response))
+                return HttpResponse(json.dumps(response), content_type='application/json; charset=utf-8')
             else:
                 print 'API call error! ' + str(r.status_code)
                 return HttpResponse({})
@@ -173,7 +173,7 @@ def pb_helper(request):
 
 
 def champion_list(request):
-    return HttpResponse(json.dumps(sorted([champion.name for champion in Champion.objects.all()])))
+    return HttpResponse(json.dumps(sorted([champion.name for champion in Champion.objects.all()])), content_type='application/json; charset=utf-8')
 
 
 def champion_matchup(request):
@@ -185,6 +185,6 @@ def champion_matchup(request):
         champion_matchup = {i: champion_matchup[i] for i in champion_matchup if i not in ['champion', 'role', 'last_updated']}
         for (k, v) in champion_matchup.items():
             champion_matchup[k] = json.loads(v)
-        return HttpResponse(json.dumps(champion_matchup))
+        return HttpResponse(json.dumps(champion_matchup), content_type='application/json; charset=utf-8')
     else:
         return HttpResponse()
