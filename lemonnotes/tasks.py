@@ -89,8 +89,8 @@ class UrlCrawlerScript(Process):
         reactor.run()
 
 
-def add_matchups_to_db():
-    with open('championgg.json', 'r') as f:
+def add_matchups_to_db(filename='championgg.json'):
+    with open(filename, 'r') as f:
         matchups = json.load(f)
         for matchup in matchups:
             if ChampionMatchup.objects.filter(champion=matchup['champion'], role=matchup['role']).exists():

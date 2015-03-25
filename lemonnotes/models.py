@@ -54,3 +54,4 @@ class ChampionMatchup(models.Model):
     adc_supports_that_synergize_poorly = JSONField(default=[])
     adc_supports_that_this_counters = JSONField(default=[])
     adc_supports_that_synergize_well = JSONField(default=[])
+    last_updated = models.DateTimeField(auto_now=True, default=datetime.now)

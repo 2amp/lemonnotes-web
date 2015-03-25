@@ -3,11 +3,12 @@ from django.http import HttpResponse
 import requests
 import json
 from lemonnotes import utils
-from .models import Realms, Champion
+from .models import Realms, Champion, ChampionMatchup
 # from .tasks import update_realms, update_champion_list
 from time import sleep
 # from datetime import datetime
 # import pytz
+from django.core import serializers
 
 # Create your views here.
 
@@ -173,3 +174,17 @@ def pb_helper(request):
 
 def champion_list(request):
     return HttpResponse(json.dumps(sorted([champion.name for champion in Champion.objects.all()])))
+
+
+def champion_matchup(request):
+    champion = request.GET['champion']
+    role = request.GET['role']
+    if ChampionMatchup.objects.filter(champion=champion, role=role).exists():
+        champion_matchup_json = serializers.serialize('json', [ChampionMatchup.objects.get(champion=champion, role=role)])
+        champion_matchup = json.loads(champion_matchup_json)[0]['fields']
+        champion_matchup = {i: champion_matchup[i] for i in champion_matchup if i not in ['champion', 'role', 'last_updated']}
+        for (k, v) in champion_matchup.items():
+            champion_matchup[k] = json.loads(v)
+        return HttpResponse(json.dumps(champion_matchup))
+    else:
+        return HttpResponse()

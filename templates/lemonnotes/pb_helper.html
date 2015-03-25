@@ -26,16 +26,29 @@
           <th class="matchup">Matchup info</th>
         </tr>
       </thead>
-      <tbody data-bind="foreach: matchups">
+      <tbody data-bind="foreach: championPicks">
         <tr data-bind="visible: summonerName">
           <td>
             <div class="summoner-name" data-bind="text: summonerName">Test</div>
             <div>
-              <ul class="nav nav-list">
-                <form>
-                  <li><input class="form-control champion-pick" type="text" name="suggestion" value="" id="suggestion"></li><br>
-                </form>
-              </ul>
+              <form>
+                <input class="form-control champion-pick" type="text" name="suggestion" data-bind="textInput: championName,
+                                                                         attr: {placeholder: summonerName() + '\'s pick'},
+                                                                         event: {focusout: function(data, event) {$root.updateOnFocusout($index(), data, event)}, keypress: function(data, event) {return $root.updateOnEnter($index(), data, event)}},
+                                                                         css: {
+                                                                           'champion-pick-field-valid': fetchStatus() === 'valid',
+                                                                           'champion-pick-field-invalid': fetchStatus() === 'invalid',
+                                                                           'champion-pick-field-fetching': fetchStatus() === 'fetching',
+                                                                           'champion-pick-field-none': fetchStatus() === 'none'
+                                                                         }">
+                <select class="form-control" data-bind="value: role">
+                  <option>Top</option>
+                  <option>Jungle</option>
+                  <option>Middle</option>
+                  <option>ADC</option>
+                  <option>Support</option>
+                </select>
+              </form>
             </div>
           </td>
           <td></td>

@@ -7,4 +7,5 @@ urlpatterns = patterns(
     url(r'^summoner_stats/$', views.summoner_stats, name='summoner_stats'),
     url(r'^pb_helper/$', views.pb_helper, name='pb_helper'),
     url(r'^champion_list/$', views.champion_list, name='champion_list'),
+    url(r'^champion_matchup/$', views.champion_matchup, name='champion_matchup')
 )
