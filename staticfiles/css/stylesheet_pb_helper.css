@@ -9,3 +9,19 @@ th.matchup {
 .summoner-name {
     text-align: center;
 }
+
+.inputs {
+    display: inline;
+}
+
+.champion-pick-field-valid {
+    border-color: green !important;
+}
+
+.champion-pick-field-invalid {
+    border-color: red !important;
+}
+
+.champion-pick-field-fetching {
+    border-color: orange !important;
+}

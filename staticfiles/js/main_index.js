@@ -49,7 +49,7 @@ function SummonerListViewModel() {
       var summoner = self.summoners()[index];
       if (searchFieldSummoner.name()) {
         if (searchFieldSummoner.name() !== oldSearchFieldValues[index]) {
-          oldSearchFieldValues[index] = self.searchFieldSummoners()[index].name();
+          oldSearchFieldValues[index] = searchFieldSummoner.name();
           searchFieldSummoner.fetchStatus('fetching');
           self.sendRequest(index);
         }
@@ -76,7 +76,7 @@ function SummonerListViewModel() {
     var summoner = self.summoners()[index];
     if (searchFieldSummoner.name()) {
       if (searchFieldSummoner.name() !== oldSearchFieldValues[index]) {
-        oldSearchFieldValues[index] = self.searchFieldSummoners()[index].name();
+        oldSearchFieldValues[index] = searchFieldSummoner.name();
         searchFieldSummoner.fetchStatus('fetching');
         self.sendRequest(index);
       }
@@ -101,8 +101,7 @@ function SummonerListViewModel() {
     $.get('/lemonnotes/summoner_stats/', {'summoner_name': searchFieldSummoner.name(), 'matches_to_fetch': self.matchesToFetch()})
       .done(function(data) {
         if (data) {
-          console.log($.parseJSON(data));
-          data = $.parseJSON(data);
+          console.log(data);
           summoner.name(data.name);
           summoner.summonerId(data.id);
           summoner.isDataFetched(true);
