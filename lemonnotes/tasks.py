@@ -122,7 +122,7 @@ def add_matchups_to_db(filename='championgg.json'):
                 cm.save()
 
 
-@periodic_task(run_every=datetime.timedelta(days=1))
+# @periodic_task(run_every=datetime.timedelta(days=1))
 def run_spider():
     print os.getcwd()
     spider = ChampionGgSpider()
