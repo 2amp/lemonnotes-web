@@ -34,7 +34,10 @@
               <form>
                 <input class="form-control champion-pick" type="text" name="suggestion" data-bind="textInput: championName,
                                                                          attr: {placeholder: summonerName() + '\'s pick'},
-                                                                         event: {focusout: function(data, event) {$root.updateOnFocusout($index(), data, event)}, keypress: function(data, event) {return $root.updateOnEnter($index(), data, event)}},
+                                                                         event: {
+                                                                           keydown: function(data, event) {return $root.updateOnKeydown($index(), data, event)},
+                                                                           focusout: function(data, event) {$root.onFocusout($index(), data, event)}
+                                                                         },
                                                                          css: {
                                                                            'champion-pick-field-valid': fetchStatus() === 'valid',
                                                                            'champion-pick-field-invalid': fetchStatus() === 'invalid',

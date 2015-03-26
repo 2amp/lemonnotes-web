@@ -84,13 +84,13 @@ def get_match_history(region, summoner_id, begin, end):
     begin_index = 'beginIndex=' + str(begin)
     end_index = 'endIndex=' + str(end)
     url = utils.api_url(utils.K_LOL_MATCH_HISTORY, region, summoner_id, [begin_index, end_index])
-    r = requests.get(url)
+    r = requests.get(url, timeout=5)
     matches = []
     if r.status_code == 429:
         # I have no idea how this will affect other threads. Hopefully we can get a greater rate limit so we don't have
         # to resort to doing this.
         sleep(1)
-        r = requests.get(url)
+        r = requests.get(url, timeout=5)
     if r.status_code == requests.codes.ok and 'matches' in r.json():
         matches = r.json()['matches']
     return matches
@@ -118,12 +118,12 @@ def get_solo_queue_ranked_info(summoner_id):
     solo_queue_ranked_info = {'tier': 'Unranked', 'division': ''}
     url = utils.api_url(utils.K_LOL_LEAGUE_SUMMONER_ENTRY, 'na', summoner_id, None)
     print url
-    r = requests.get(url)
+    r = requests.get(url, timeout=5)
     if r.status_code == 429:
         # I have no idea how this will affect other threads. Hopefully we can get a greater rate limit so we don't have
         # to resort to doing this.
         sleep(1)
-        r = requests.get(url)
+        r = requests.get(url, timeout=5)
     if r.status_code == requests.codes.ok and str(summoner_id) in r.json():
         all_ranked_info = r.json()[str(summoner_id)]
         for queue_info in all_ranked_info:
@@ -142,12 +142,12 @@ def summoner_stats(request):
         summoner_name = request.GET['summoner_name']
         if len(summoner_name) > 0:
             url = utils.api_url(utils.K_LOL_SUMMONER_BY_NAME, 'na', summoner_name, None)
-            r = requests.get(url)
+            r = requests.get(url, timeout=5)
             if r.status_code == 429:
                 # I have no idea how this will affect other threads. Hopefully we can get a greater rate limit so we don't have
                 # to resort to doing this.
                 sleep(1)
-                r = requests.get(url)
+                r = requests.get(url, timeout=5)
             if r.status_code == requests.codes.ok:
                 summoner_info = r.json().itervalues().next()
                 matches = get_matches_for_summoner(summoner_info['id'], int(request.GET['matches_to_fetch']))

@@ -17,32 +17,15 @@ function MatchupViewModel() {
     self.championPicks.push(new ChampionPick(summonerNames[i]));
   }
 
-  // Called when enter is pressed in a search field
-  self.updateOnEnter = function(index, d, e) {
-    var code = e.keyCode || e.which;
-    if (code === 13) {
-      e.preventDefault();
-      var championPick = self.championPicks()[index];
-      if (championPick.championName()) {
-        if (championPick.championName() !== oldChampionNameValues[index]) {
-          oldChampionNameValues[index] = championPick.championName();
-          championPick.fetchStatus('fetching');
-          self.sendRequest(index);
-        }
-      } else {
-        championPick.championName('');
-        oldChampionNameValues[index] = '';
-        championPick.fetchStatus('none');
-      }
-      return false;
-    } else {
-      // allow other keypresses to go through
-      return true;
+  // Called when focus leaves search field
+  self.onFocusout = function(index, d, e) {
+    var championPick = self.championPicks()[index];
+    if (!championPick.championName()) {
+      championPick.fetchStatus('none');
     }
   };
 
-  // Called when focus leaves search field
-  self.updateOnFocusout = function(index, d, e) {
+  self.update = function(index) {
     var championPick = self.championPicks()[index];
     if (championPick.championName()) {
       if (championPick.championName() !== oldChampionNameValues[index]) {
@@ -54,6 +37,24 @@ function MatchupViewModel() {
       championPick.championName('');
       oldChampionNameValues[index] = '';
       championPick.fetchStatus('none');
+    }
+  };
+
+  self.updateOnKeydown = function(index, d, e) {
+    var code = e.keyCode || e.which;
+    // 13 is enter, and we don't want the form to submit when enter is pressed. Rather, we want to send a request to
+    // the server instead.
+    if (code === 13) {
+      e.preventDefault();
+      self.update(index);
+      return false;
+    } else if (code === 9) {
+      // 9 is tab
+      self.update(index);
+      return true;
+    } else {
+      // allow other keypresses to go through
+      return true;
     }
   };
 
@@ -85,7 +86,9 @@ $(document).ready(function() {
   $.get('/lemonnotes/champion_list/').done(function(data) {
     var champions = data;
     $('.champion-pick').each(function() {
-      $(this).autocomplete({source: champions});
+      $(this).autocomplete({
+        lookup: [{value: 'Aatrox'}, {value: 'Ahri'}, {value: 'Vayne'}]
+      });
     });
   });
 });

@@ -34,44 +34,15 @@ function SummonerListViewModel() {
     self.summoners.push(new Summoner());
   }
 
-  self.dump = function() {
-    for (var i = 0; i < self.summoners().length; i++) {
-      console.log(self.summoners()[i]);
-    }
-  };
-
-  // Called when enter is pressed in a search field
-  self.updateOnEnter = function(index, d, e) {
-    var code = e.keyCode || e.which;
-    if (code === 13) {
-      e.preventDefault();
-      var searchFieldSummoner = self.searchFieldSummoners()[index];
-      var summoner = self.summoners()[index];
-      if (searchFieldSummoner.name()) {
-        if (searchFieldSummoner.name() !== oldSearchFieldValues[index]) {
-          oldSearchFieldValues[index] = searchFieldSummoner.name();
-          searchFieldSummoner.fetchStatus('fetching');
-          self.sendRequest(index);
-        }
-      } else {
-        summoner.name('');
-        summoner.summonerId(0);
-        summoner.stats(null);
-        summoner.mostPlayedChampions(null);
-        summoner.bestPerformanceChampions(null);
-        summoner.isDataFetched(false);
-        oldSearchFieldValues[index] = '';
-        searchFieldSummoner.fetchStatus('none');
-      }
-      return false;
-    } else {
-      // allow other keypresses to go through
-      return true;
-    }
-  };
-
   // Called when focus leaves search field
-  self.updateOnFocusout = function(index, d, e) {
+  self.onFocusout = function(index, d, e) {
+    var searchFieldSummoner = self.searchFieldSummoners()[index];
+    if (!searchFieldSummoner.name()) {
+      searchFieldSummoner.fetchStatus('none');
+    }
+  };
+
+  self.update = function(index) {
     var searchFieldSummoner = self.searchFieldSummoners()[index];
     var summoner = self.summoners()[index];
     if (searchFieldSummoner.name()) {
@@ -81,14 +52,29 @@ function SummonerListViewModel() {
         self.sendRequest(index);
       }
     } else {
-        summoner.name('');
-        summoner.summonerId(0);
-        summoner.stats(null);
-        summoner.mostPlayedChampions(null);
-        summoner.bestPerformanceChampions(null);
-        summoner.isDataFetched(false);
-        oldSearchFieldValues[index] = '';
-        searchFieldSummoner.fetchStatus('none');
+      summoner.name('');
+      summoner.summonerId(0);
+      summoner.stats(null);
+      summoner.mostPlayedChampions(null);
+      summoner.bestPerformanceChampions(null);
+      summoner.isDataFetched(false);
+      oldSearchFieldValues[index] = '';
+      searchFieldSummoner.fetchStatus('none');
+    }
+  };
+
+  self.updateOnKeydown = function(index, d, e) {
+    var code = e.keyCode || e.which;
+    if (code === 13) {
+      e.preventDefault();
+      self.update(index);
+      return false;
+    } else if (code === 9) {
+      self.update(index);
+      return true;
+    } else {
+      // allow other keypresses to go through
+      return true;
     }
   };
 
