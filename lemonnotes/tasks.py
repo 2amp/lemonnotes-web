@@ -1,22 +1,12 @@
 from __future__ import absolute_import
-
 from lemonnotes_web.celery import app
 from celery.decorators import periodic_task
 import datetime
-
 from lemonnotes import utils
 from .models import Realms, Champion, ChampionMatchup
 import requests
-
-import os
+import championgg_scraper
 import json
-from twisted.internet import reactor
-from scrapy.crawler import Crawler
-from scrapy import log, signals, project
-from championgg.spiders.championgg_spider import ChampionGgSpider
-from scrapy.utils.project import get_project_settings
-from billiard import Process
-
 
 # @periodic_task(run_every=datetime.timedelta(seconds=5))
 @periodic_task(run_every=datetime.timedelta(days=1))
@@ -59,34 +49,13 @@ def update_champion_list():
 
 
 @app.task
-def shared_task_update_realms():
+def app_task_update_realms():
     update_realms()
 
 
 @app.task
-def shared_task_update_champion_list():
+def app_task_update_champion_list():
     update_champion_list()
-
-
-class UrlCrawlerScript(Process):
-    def __init__(self, spider):
-        Process.__init__(self)
-        os.chdir('championgg')
-        if os.path.exists('championgg.json'):
-            os.remove('championgg.json')
-        settings = get_project_settings()
-        self.crawler = Crawler(settings)
-
-        if not hasattr(project, 'crawler'):
-            self.crawler.install()
-            self.crawler.configure()
-            self.crawler.signals.connect(reactor.stop, signal=signals.spider_closed)
-        self.spider = spider
-
-    def run(self):
-        self.crawler.crawl(self.spider)
-        self.crawler.start()
-        reactor.run()
 
 
 def add_matchups_to_db(filename='championgg.json'):
@@ -122,12 +91,7 @@ def add_matchups_to_db(filename='championgg.json'):
                 cm.save()
 
 
-# @periodic_task(run_every=datetime.timedelta(days=1))
-def run_spider():
-    print os.getcwd()
-    spider = ChampionGgSpider()
-    crawler = UrlCrawlerScript(spider)
-    crawler.start()
-    crawler.join()
+@periodic_task(run_every=datetime.timedelta(days=1))
+def run_scraper():
+    championgg_scraper.scrape()
     add_matchups_to_db()
-    os.chdir('..')
