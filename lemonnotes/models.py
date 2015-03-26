@@ -42,7 +42,7 @@ class Champion(models.Model):
 
 
 class ChampionMatchup(models.Model):
-    champion = models.CharField(max_length=128, default='')
+    champion_name = models.CharField(max_length=128, default='')
     role = models.CharField(max_length=16, default='')
     champions_that_counter = JSONField(default=[])
     champions_that_this_counters = JSONField(default=[])

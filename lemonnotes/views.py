@@ -50,7 +50,7 @@ def build_champion_stats(matches):
                                      'image_url': utils.image_url(utils.K_LOL_CHAMP_ICON,
                                                                   Realms.get_solo().n['champion'],
                                                                   Champion.objects.get(idNumber=champion).key),
-                                     'name': Champion.objects.get(idNumber=champion).name}
+                                     'champion_name': Champion.objects.get(idNumber=champion).name}
         else:
             if winner:
                 playerStats[champion]['wins'] = playerStats[champion]['wins'] + 1
@@ -177,12 +177,12 @@ def champion_list(request):
 
 
 def champion_matchup(request):
-    champion = request.GET['champion']
+    champion_name = request.GET['champion']
     role = request.GET['role']
-    if ChampionMatchup.objects.filter(champion=champion, role=role).exists():
-        champion_matchup_json = serializers.serialize('json', [ChampionMatchup.objects.get(champion=champion, role=role)])
+    if ChampionMatchup.objects.filter(champion_name=champion_name, role=role).exists():
+        champion_matchup_json = serializers.serialize('json', [ChampionMatchup.objects.get(champion_name=champion_name, role=role)])
         champion_matchup = json.loads(champion_matchup_json)[0]['fields']
-        champion_matchup = {i: champion_matchup[i] for i in champion_matchup if i not in ['champion', 'role', 'last_updated']}
+        champion_matchup = {i: champion_matchup[i] for i in champion_matchup if i not in ['champion_name', 'role', 'last_updated']}
         for (k, v) in champion_matchup.items():
             champion_matchup[k] = json.loads(v)
         return HttpResponse(json.dumps(champion_matchup), content_type='application/json; charset=utf-8')

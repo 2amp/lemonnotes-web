@@ -9,7 +9,7 @@ class ChampionAdmin(admin.ModelAdmin):
 
 
 class ChampionMatchupAdmin(admin.ModelAdmin):
-    list_display = ('champion', 'role', 'champions_that_counter', 'champions_that_this_counters')
+    list_display = ('champion_name', 'role', 'champions_that_counter', 'champions_that_this_counters')
 
 admin.site.register(Realms)
 admin.site.register(Champion, ChampionAdmin)

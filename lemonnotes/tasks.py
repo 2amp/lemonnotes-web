@@ -62,8 +62,8 @@ def add_matchups_to_db(filename='championgg.json'):
     with open(filename, 'r') as f:
         matchups = json.load(f)
         for matchup in matchups:
-            if ChampionMatchup.objects.filter(champion=matchup['champion'], role=matchup['role']).exists():
-                cm = ChampionMatchup.objects.get(champion=matchup['champion'], role=matchup['role'])
+            if ChampionMatchup.objects.filter(champion_name=matchup['champion_name'], role=matchup['role']).exists():
+                cm = ChampionMatchup.objects.get(champion_name=matchup['champion_name'], role=matchup['role'])
                 cm.champions_that_counter = matchup['champions_that_counter']
                 cm.champions_that_this_counters = matchup['champions_that_this_counters']
                 cm.support_adcs_that_counter = matchup.get('support_adcs_that_counter', [])
@@ -76,7 +76,7 @@ def add_matchups_to_db(filename='championgg.json'):
                 cm.adc_supports_that_synergize_well = matchup.get('adc_supports_that_synergize_well', [])
                 cm.save()
             else:
-                cm = ChampionMatchup(champion=matchup['champion'],
+                cm = ChampionMatchup(champion_name=matchup['champion_name'],
                                      role=matchup['role'],
                                      champions_that_counter=matchup['champions_that_counter'],
                                      champions_that_this_counters=matchup['champions_that_this_counters'],
