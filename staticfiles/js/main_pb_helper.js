@@ -26,6 +26,8 @@ function MatchupViewModel() {
   };
 
   self.update = function(index) {
+    // ensure that if the pick was selected from the autocomplete dropdown, a change is triggered
+    $('.champion-pick').eq(index).change();
     var championPick = self.championPicks()[index];
     if (championPick.championName()) {
       if (championPick.championName() !== oldChampionNameValues[index]) {
@@ -80,15 +82,28 @@ function MatchupViewModel() {
   };
 }
 
-ko.applyBindings(new MatchupViewModel());
+var mvm = new MatchupViewModel();
+ko.applyBindings(mvm);
 
 $(document).ready(function() {
   $.get('/lemonnotes/champion_list/').done(function(data) {
-    var champions = data;
+    var champions = [];
+    for (var i = 0; i < data.length; i++) {
+      champions.push({value: data[i]});
+    }
     $('.champion-pick').each(function() {
       $(this).autocomplete({
-        lookup: [{value: 'Aatrox'}, {value: 'Ahri'}, {value: 'Vayne'}]
+        lookup: champions,
+        onSelect: function (selection) {
+          console.log(selection);
+        }
       });
     });
   });
 });
+
+var dump = function() {
+  for (var i = 0; i < NUMBER_OF_SUMMONERS; i++) {
+    console.log(mvm.championPicks()[i].championName());
+  }
+};
