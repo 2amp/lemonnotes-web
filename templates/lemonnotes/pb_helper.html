@@ -54,7 +54,22 @@
               </form>
             </div>
           </td>
-          <td></td>
+          <td>
+            <!-- ko if: championMatchups -->
+            <div>
+              <ul class="champions-that-counter-list" data-bind="foreach: championMatchups().champions_that_counter">
+                <li data-bind="text: champion_name"></li>
+              </ul>
+            </div>
+            <!-- ko if: role() === 'ADC' -->
+            <div>
+              <ul class="champions-that-counter-list" data-bind="foreach: championMatchups().champions_that_counter">
+                <li data-bind="text: champion_name"></li>
+              </ul>
+            </div>
+            <!-- /ko -->
+            <!-- /ko -->
+          </td>
         </tr>
       </tbody>
     </table>

@@ -58,12 +58,12 @@
           <td>
             <ul class='most-played-champions-list' data-bind='foreach: mostPlayedChampions'>
               <li class='most-played-champion-data'>
-                <div class='champion-icon' data-bind="attr: {style: $root.styleFromUrl($data[Object.keys($data)[0]].image_url)}, tooltip: {title: $data[Object.keys($data)[0]].champion_name}"></div>
-                <div data-bind="text: 'Games: ' + $data[Object.keys($data)[0]].games"></div>
+                <div class='champion-icon' data-bind="attr: {style: $root.styleFromUrl(image_url)}, tooltip: {title: champion_name}"></div>
+                <div data-bind="text: 'Games: ' + games"></div>
                 <div>
-                <span class="wins" data-bind="text: $data[Object.keys($data)[0]].wins"></span>
+                <span class="wins" data-bind="text: wins"></span>
                 /
-                <span class="losses" data-bind="text: $data[Object.keys($data)[0]].games - $data[Object.keys($data)[0]].wins"></span>
+                <span class="losses" data-bind="text: games - wins"></span>
                 </div>
               </li>
             </ul>
@@ -71,12 +71,12 @@
           <td>
             <ul class='best-performance-champions-list' data-bind='foreach: bestPerformanceChampions'>
               <li class='best-performance-champion-data'>
-                <div class='champion-icon' data-bind="attr: {style: $root.styleFromUrl($data[Object.keys($data)[0]].image_url)}, tooltip: {title: $data[Object.keys($data)[0]].champion_name}"></div>
-                <div data-bind="text: 'Games: ' + $data[Object.keys($data)[0]].games"></div>
+                <div class='champion-icon' data-bind="attr: {style: $root.styleFromUrl(image_url)}, tooltip: {title: champion_name}"></div>
+                <div data-bind="text: 'Games: ' + games"></div>
                 <div>
-                <span class="wins" data-bind="text: $data[Object.keys($data)[0]].wins"></span>
+                <span class="wins" data-bind="text: wins"></span>
                 /
-                <span class="losses" data-bind="text: $data[Object.keys($data)[0]].games - $data[Object.keys($data)[0]].wins"></span>
+                <span class="losses" data-bind="text: games - wins"></span>
                 </div>
               </li>
             </ul>

@@ -64,15 +64,29 @@ def build_champion_stats(matches):
 
 def most_played_champions_stats(champion_stats, number=5):
     '''Returns an array of stat dicts for the most played champions, sorted by the most played first.'''
-    return map(lambda x: dict((x,)), sorted(champion_stats.items(), key=lambda x: x[1]['games'], reverse=True)[:5])
+    stats_dicts = []
+    for tup in sorted(champion_stats.items(), key=lambda x: x[1]['games'], reverse=True)[:number]:
+        champion_key = tup[0]
+        stats_dict = tup[1]
+        stats_dict['champion_key'] = champion_key
+        stats_dicts.append(stats_dict)
+    # return map(lambda x: dict((x,)), sorted(champion_stats.items(), key=lambda x: x[1]['games'], reverse=True)[:number])
+    return stats_dicts
 
 
 def best_performance_champions_stats(champion_stats, number=5):
     '''Returns an array of stat dicts for the champions on which the summoner has best performed.'''
     for (k, champion_stat) in champion_stats.items():
         champion_stat['wilson'] = utils.wilson_score_interval(champion_stat['wins'], champion_stat['games'] - champion_stat['wins'])
-    return map(lambda x: dict((x,)), sorted(champion_stats.items(),
-               key=lambda x: utils.wilson_score_interval(x[1]['wins'], x[1]['games'] - x[1]['wins']), reverse=True)[:5])
+    # return map(lambda x: dict((x,)), sorted(champion_stats.items(),
+    #            key=lambda x: utils.wilson_score_interval(x[1]['wins'], x[1]['games'] - x[1]['wins']), reverse=True)[:number])
+    stats_dicts = []
+    for tup in sorted(champion_stats.items(), key=lambda x: utils.wilson_score_interval(x[1]['wins'], x[1]['games'] - x[1]['wins']), reverse=True)[:number]:
+        champion_key = tup[0]
+        stats_dict = tup[1]
+        stats_dict['champion_key'] = champion_key
+        stats_dicts.append(stats_dict)
+    return stats_dicts
 
 
 def get_match_history(region, summoner_id, begin, end):
@@ -182,9 +196,15 @@ def champion_matchup(request):
     if ChampionMatchup.objects.filter(champion_name=champion_name, role=role).exists():
         champion_matchup_json = serializers.serialize('json', [ChampionMatchup.objects.get(champion_name=champion_name, role=role)])
         champion_matchup = json.loads(champion_matchup_json)[0]['fields']
+        # return only matchup data since caller already knows champion_name and role
         champion_matchup = {i: champion_matchup[i] for i in champion_matchup if i not in ['champion_name', 'role', 'last_updated']}
         for (k, v) in champion_matchup.items():
             champion_matchup[k] = json.loads(v)
+            if len(champion_matchup[k]) > 0:
+                for matchup in champion_matchup[k]:
+                    matchup['image_url'] = utils.image_url(utils.K_LOL_CHAMP_ICON,
+                                                           Realms.get_solo().n['champion'],
+                                                           Champion.objects.get(name=matchup['champion_name']).key)
         return HttpResponse(json.dumps(champion_matchup), content_type='application/json; charset=utf-8')
     else:
         return HttpResponse()
