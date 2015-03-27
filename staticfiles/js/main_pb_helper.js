@@ -5,6 +5,7 @@ var oldChampionNameValues = new Array(NUMBER_OF_SUMMONERS);
 function ChampionPick(summonerName) {
   this.summonerName = ko.observable(summonerName);
   this.championName = ko.observable('');
+  this.championMatchups = ko.observable();
   this.role = ko.observable('');
   this.fetchStatus = ko.observable('none');
 }
@@ -69,6 +70,7 @@ function MatchupViewModel() {
       .done(function(data) {
         if (data) {
           console.log(data);
+          championPick.championMatchups(data);
           championPick.fetchStatus('valid');
         } else {
           console.log('error!');
