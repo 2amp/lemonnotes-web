@@ -1,3 +1,7 @@
+th {
+    text-align: center;
+}
+
 th.name {
     width: 30%;
 }
@@ -24,6 +28,27 @@ th.matchup {
 
 .champion-pick-field-fetching {
     border-color: orange !important;
+}
+
+.champions-that-counter-list {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: -6px;
+}
+
+.champions-that-counter-data {
+    display: inline-block;
+    font-size: 10px;
+    text-align: center;
+}
+
+.champion-icon {
+/*    height: 50px;
+    width: 50px;
+    background-size: 50px;*/
+    height: 48px;
+    width: 48px;
+    background-size: 48px;
 }
 
 .autocomplete-suggestions { border: 1px solid #999; background: #fff; cursor: default; overflow: auto; }

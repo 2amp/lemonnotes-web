@@ -36,6 +36,7 @@ class Champion(models.Model):
     title = models.CharField(max_length=128, default='')
     name = models.CharField(max_length=128, default='')
     key = models.CharField(max_length=128, default='')
+    image = JSONField(default={})
 
     class Meta:
             verbose_name_plural = "Champions"

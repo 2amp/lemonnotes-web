@@ -58,7 +58,9 @@
             <!-- ko if: championMatchups -->
             <div>
               <ul class="champions-that-counter-list" data-bind="foreach: championMatchups().champions_that_counter">
-                <li data-bind="text: champion_name"></li>
+                <li class="champions-that-counter-data">
+                  <div class="champion-icon" data-bind="attr: {style: $root.styleFromSpriteSheetUrl(sprite_sheet_url, -x, -y)}, tooltip: {title: champion_name}"></div>
+                </li>
               </ul>
             </div>
             <!-- ko if: role() === 'ADC' -->

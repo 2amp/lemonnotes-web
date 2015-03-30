@@ -110,6 +110,10 @@ function SummonerListViewModel() {
   self.styleFromUrl = function(url) {
     return 'background-image: url("' + url + '");';
   };
+
+  self.styleFromSpriteSheetUrl = function(spriteSheetUrl, x, y) {
+    return 'background: url("' + spriteSheetUrl + '") ' + x + 'px ' + y + 'px;';
+  };
 }
 
 ko.applyBindings(new SummonerListViewModel());

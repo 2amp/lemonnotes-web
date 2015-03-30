@@ -50,6 +50,11 @@ def build_champion_stats(matches):
                                      'image_url': utils.image_url(utils.K_LOL_CHAMP_ICON,
                                                                   Realms.get_solo().n['champion'],
                                                                   Champion.objects.get(idNumber=champion).key),
+                                     'sprite_sheet_url': utils.image_url(utils.K_LOL_SPRITE_SHEET,
+                                                                        Realms.get_solo().n['champion'],
+                                                                        Champion.objects.get(idNumber=champion).image['sprite']),
+                                     'x': Champion.objects.get(idNumber=champion).image['x'],
+                                     'y': Champion.objects.get(idNumber=champion).image['y'],
                                      'champion_name': Champion.objects.get(idNumber=champion).name}
         else:
             if winner:
@@ -205,6 +210,11 @@ def champion_matchup(request):
                     matchup['image_url'] = utils.image_url(utils.K_LOL_CHAMP_ICON,
                                                            Realms.get_solo().n['champion'],
                                                            Champion.objects.get(name=matchup['champion_name']).key)
+                    matchup['sprite_sheet_url'] = utils.image_url(utils.K_LOL_SPRITE_SHEET,
+                                                                  Realms.get_solo().n['champion'],
+                                                                  Champion.objects.get(name=matchup['champion_name']).image['sprite']),
+                    matchup['x'] = Champion.objects.get(name=matchup['champion_name']).image['x'],
+                    matchup['y'] = Champion.objects.get(name=matchup['champion_name']).image['y'],
         return HttpResponse(json.dumps(champion_matchup), content_type='application/json; charset=utf-8')
     else:
         return HttpResponse()

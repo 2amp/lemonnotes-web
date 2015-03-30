@@ -46,9 +46,12 @@ tr .best-performance-champions {
 }
 
 .champion-icon {
-    height: 50px;
+/*    height: 50px;
     width: 50px;
-    background-size: 50px;
+    background-size: 50px;*/
+    height: 48px;
+    width: 48px;
+    background-size: 48px;
 }
 
 th {

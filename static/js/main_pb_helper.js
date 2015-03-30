@@ -2,20 +2,30 @@ var NUMBER_OF_SUMMONERS = 5;
 
 var oldChampionNameValues = new Array(NUMBER_OF_SUMMONERS);
 
-function ChampionPick(summonerName) {
+function ChampionPick(summonerName, position) {
   this.summonerName = ko.observable(summonerName);
   this.championName = ko.observable('');
   this.championMatchups = ko.observable();
-  this.role = ko.observable('');
+  this.role = ko.observable('Top');
   this.fetchStatus = ko.observable('none');
+  this.position = ko.observable(position);
 }
 
 function MatchupViewModel() {
   var self = this;
   self.championPicks = ko.observableArray();
 
+  self.subscribeToNotifications = function(index) {
+    console.log(index);
+  };
+
   for (var i = 0; i < NUMBER_OF_SUMMONERS; i++) {
-    self.championPicks.push(new ChampionPick(summonerNames[i]));
+    self.championPicks.push(new ChampionPick(summonerNames[i], i));
+    (function (iCopy) {
+      self.championPicks()[i].role.subscribe(function() {
+        self.update(iCopy, true);
+      });
+    }(i));
   }
 
   // Called when focus leaves search field
@@ -26,12 +36,12 @@ function MatchupViewModel() {
     }
   };
 
-  self.update = function(index) {
+  self.update = function(index, force) {
     // ensure that if the pick was selected from the autocomplete dropdown, a change is triggered
     $('.champion-pick').eq(index).change();
     var championPick = self.championPicks()[index];
     if (championPick.championName()) {
-      if (championPick.championName() !== oldChampionNameValues[index]) {
+      if (force || championPick.championName() !== oldChampionNameValues[index]) {
         oldChampionNameValues[index] = championPick.championName();
         championPick.fetchStatus('fetching');
         self.sendRequest(index);
@@ -49,11 +59,11 @@ function MatchupViewModel() {
     // the server instead.
     if (code === 13) {
       e.preventDefault();
-      self.update(index);
+      self.update(index, false);
       return false;
     } else if (code === 9) {
       // 9 is tab
-      self.update(index);
+      self.update(index, false);
       return true;
     } else {
       // allow other keypresses to go through
@@ -81,6 +91,10 @@ function MatchupViewModel() {
         console.log('error!');
         championPick.fetchStatus('invalid');
       });
+  };
+
+  self.styleFromSpriteSheetUrl = function(spriteSheetUrl, x, y) {
+    return 'background: url("' + spriteSheetUrl + '") ' + x + 'px ' + y + 'px;';
   };
 }
 

@@ -32,7 +32,7 @@ def update_realms():
 @periodic_task(run_every=datetime.timedelta(days=1))
 def update_champion_list():
     '''Update champion list every day.'''
-    url = utils.api_url(utils.K_LOL_STATIC_CHAMPION_LIST, 'na', '', ['dataById=true'])
+    url = utils.api_url(utils.K_LOL_STATIC_CHAMPION_LIST, 'na', '', ['dataById=true', 'champData=image'])
     r = requests.get(url)
     if r.status_code == requests.codes.ok:
         fetched_champion_list = r.json()['data']
@@ -42,9 +42,10 @@ def update_champion_list():
                 c.title = champion['title']
                 c.name = champion['name']
                 c.key = champion['key']
+                c.image = champion['image']
                 c.save()
             else:
-                c = Champion(idNumber=champion['id'], title=champion['title'], name=champion['name'], key=champion['key'])
+                c = Champion(idNumber=champion['id'], title=champion['title'], name=champion['name'], key=champion['key'], image=champion['image'])
                 c.save()
 
 

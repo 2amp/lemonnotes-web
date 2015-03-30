@@ -79,6 +79,7 @@ K_LOL_CHAMP_SPLASH = DDRAGON + '/img/champion/splash/{key}_0.jpg'
 K_LOL_CHAMP_ICON = DDRAGON + '/{version}/img/champion/{key}.png'
 K_LOL_SPELL_ICON = DDRAGON + '/{version}/img/spell/{key}.png'
 K_LOL_ITEM_ICON = DDRAGON + '/{version}/img/item/{key}.png'
+K_LOL_SPRITE_SHEET = DDRAGON + '/{version}/img/sprite/{key}'
 
 # heroku
 RIOT_API_KEY = os.environ['RIOT_API_KEY']
